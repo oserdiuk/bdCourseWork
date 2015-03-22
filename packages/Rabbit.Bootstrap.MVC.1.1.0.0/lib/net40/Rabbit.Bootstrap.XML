@@ -1,0 +1,208 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Rabbit.Bootstrap</name>
+    </assembly>
+    <members>
+        <member name="T:Rabbit.Bootstrap.BootstrapFactory">
+            <summary>
+            Bootstrap 工厂。
+            </summary>
+        </member>
+        <member name="M:Rabbit.Bootstrap.BootstrapFactory.#ctor(System.Web.Mvc.HtmlHelper)">
+            <summary>
+            初始化一个新的 Bootstrap 工厂。
+            </summary>
+            <param name="htmlHelper">Html 助手。</param>
+        </member>
+        <member name="P:Rabbit.Bootstrap.BootstrapFactory.HtmlHelper">
+            <summary>
+            Html助手。
+            </summary>
+        </member>
+        <member name="T:Rabbit.Bootstrap.BootstrapFactory`1">
+            <summary>
+            Bootstrap 泛型工厂。
+            </summary>
+            <typeparam name="TModel">模型类型。</typeparam>
+        </member>
+        <member name="M:Rabbit.Bootstrap.BootstrapFactory`1.#ctor(System.Web.Mvc.HtmlHelper{`0})">
+            <summary>
+            初始化一个新的 Bootstrap 工厂。
+            </summary>
+            <param name="htmlHelper">Html 助手。</param>
+        </member>
+        <member name="P:Rabbit.Bootstrap.BootstrapFactory`1.HtmlHelper">
+            <summary>
+            Html助手。
+            </summary>
+        </member>
+        <member name="T:Rabbit.Bootstrap.BootstrapFactoryExtensions">
+            <summary>
+            Bootstrap 工厂扩展方法。
+            </summary>
+        </member>
+        <member name="M:Rabbit.Bootstrap.BootstrapFactoryExtensions.Bootstrap(System.Web.Mvc.HtmlHelper)">
+            <summary>
+            Bootstrap。
+            </summary>
+            <param name="htmlHelper">Html 助手。</param>
+            <returns>Bootstrap 工厂。</returns>
+        </member>
+        <member name="M:Rabbit.Bootstrap.BootstrapFactoryExtensions.Bootstrap``1(System.Web.Mvc.HtmlHelper{``0})">
+            <summary>
+            Bootstrap。
+            </summary>
+            <typeparam name="TModel">模型类型。</typeparam>
+            <param name="htmlHelper">Html 助手。</param>
+            <returns>Bootstrap 工厂。</returns>
+        </member>
+        <member name="T:Rabbit.Bootstrap.ButtonBuilder">
+            <summary>
+            按钮建设者。
+            </summary>
+        </member>
+        <member name="M:Rabbit.Bootstrap.TagElementBuilder`1.ToHtmlString">
+            <summary>
+            返回 HTML 编码的字符串。
+            </summary>
+            <returns>
+            HTML 编码的字符串。
+            </returns>
+        </member>
+        <member name="M:Rabbit.Bootstrap.ButtonBuilder.ToHtmlString">
+            <summary>
+            返回 HTML 编码的字符串。
+            </summary>
+            <returns>
+            HTML 编码的字符串。
+            </returns>
+        </member>
+        <member name="M:Rabbit.Bootstrap.ButtonBuilder.ToString">
+            <summary>
+            返回表示当前 <see cref="T:System.Object"/> 的 <see cref="T:System.String"/>。
+            </summary>
+            <returns>
+            <see cref="T:System.String"/>，表示当前的 <see cref="T:System.Object"/>。
+            </returns>
+        </member>
+        <member name="M:Rabbit.Bootstrap.SizeConfiguration`1.ToString">
+            <summary>
+            返回表示当前 <see cref="T:System.Object"/> 的 <see cref="T:System.String"/>。
+            </summary>
+            <returns>
+            <see cref="T:System.String"/>，表示当前的 <see cref="T:System.Object"/>。
+            </returns>
+        </member>
+        <member name="M:Rabbit.Bootstrap.StyleConfiguration`1.ToString">
+            <summary>
+            返回表示当前 <see cref="T:System.Object"/> 的 <see cref="T:System.String"/>。
+            </summary>
+            <returns>
+            <see cref="T:System.String"/>，表示当前的 <see cref="T:System.Object"/>。
+            </returns>
+        </member>
+        <member name="T:Rabbit.Bootstrap.ButtonExtensions">
+            <summary>
+            按钮扩展方法。
+            </summary>
+        </member>
+        <member name="M:Rabbit.Bootstrap.FormBuilder.FormMethodConfiguration.ToString">
+            <summary>
+            返回表示当前 <see cref="T:System.Object"/> 的 <see cref="T:System.String"/>。
+            </summary>
+            <returns>
+            <see cref="T:System.String"/>，表示当前的 <see cref="T:System.Object"/>。
+            </returns>
+        </member>
+        <member name="M:Rabbit.Bootstrap.FormBuilder.FormEnctypeConfiguration.Default">
+            <summary>
+            application/x-www-form-urlencoded
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Rabbit.Bootstrap.FormBuilder.FormEnctypeConfiguration.FormData">
+            <summary>
+            multipart/form-data
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Rabbit.Bootstrap.FormBuilder.FormEnctypeConfiguration.TextPlain">
+            <summary>
+            text/plain
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Rabbit.Bootstrap.FormBuilder.FormEnctypeConfiguration.ToString">
+            <summary>
+            返回表示当前 <see cref="T:System.Object"/> 的 <see cref="T:System.String"/>。
+            </summary>
+            <returns>
+            <see cref="T:System.String"/>，表示当前的 <see cref="T:System.Object"/>。
+            </returns>
+        </member>
+        <member name="M:Rabbit.Bootstrap.FormBuilder.FormTypeConfiguration.ToString">
+            <summary>
+            返回表示当前 <see cref="T:System.Object"/> 的 <see cref="T:System.String"/>。
+            </summary>
+            <returns>
+            <see cref="T:System.String"/>，表示当前的 <see cref="T:System.Object"/>。
+            </returns>
+        </member>
+        <member name="T:Rabbit.Bootstrap.InputBuilder">
+            <summary>
+            输入组件建造者。
+            </summary>
+        </member>
+        <member name="M:Rabbit.Bootstrap.InputBuilder.ToHtmlString">
+            <summary>
+            返回 HTML 编码的字符串。
+            </summary>
+            <returns>
+            HTML 编码的字符串。
+            </returns>
+        </member>
+        <member name="M:Rabbit.Bootstrap.InputBuilder.ToString">
+            <summary>
+            返回表示当前 <see cref="T:System.Object"/> 的 <see cref="T:System.String"/>。
+            </summary>
+            <returns>
+            <see cref="T:System.String"/>，表示当前的 <see cref="T:System.Object"/>。
+            </returns>
+        </member>
+        <member name="M:Rabbit.Bootstrap.InputBuilder.TypeConfiguration.ToString">
+            <summary>
+            返回表示当前 <see cref="T:System.Object"/> 的 <see cref="T:System.String"/>。
+            </summary>
+            <returns>
+            <see cref="T:System.String"/>，表示当前的 <see cref="T:System.Object"/>。
+            </returns>
+        </member>
+        <member name="T:Rabbit.Bootstrap.InputExtensions">
+            <summary>
+            输入组件扩展程序。
+            </summary>
+        </member>
+        <member name="T:Rabbit.Bootstrap.ModalBuilder">
+            <summary>
+            模态框建设者。
+            </summary>
+        </member>
+        <member name="M:Rabbit.Bootstrap.ModalBuilder.ToHtmlString">
+            <summary>
+            返回 HTML 编码的字符串。
+            </summary>
+            <returns>
+            HTML 编码的字符串。
+            </returns>
+        </member>
+        <member name="M:Rabbit.Bootstrap.ModalBuilder.ModalHeaderConfiguration.ToString">
+            <summary>
+            返回表示当前 <see cref="T:System.Object"/> 的 <see cref="T:System.String"/>。
+            </summary>
+            <returns>
+            <see cref="T:System.String"/>，表示当前的 <see cref="T:System.Object"/>。
+            </returns>
+        </member>
+    </members>
+</doc>

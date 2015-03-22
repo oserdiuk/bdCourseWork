@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WorkFlowDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false">
+      <Documentation>
+        <LongDescription>Название компании</LongDescription>
+      </Documentation>
+    </Property>
+    <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Website" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="City" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="Int64" />
+    <Property Name="Information" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Vacancies" Relationship="Self.FK_Vacancy_ToTable" FromRole="Companies" ToRole="Vacancies" />
+  </EntityType>
+  <EntityType Name="Vacancy">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="CompanyId" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="OpenDate" Type="DateTime" Precision="0" />
+    <Property Name="Amount" Type="Int32" />
+    <NavigationProperty Name="Companies" Relationship="Self.FK_Vacancy_ToTable" FromRole="Vacancies" ToRole="Companies" />
+  </EntityType>
+  <Association Name="FK_Vacancy_ToTable">
+    <End Role="Companies" Type="WorkFlowDatabaseModel.Company" Multiplicity="1" />
+    <End Role="Vacancies" Type="WorkFlowDatabaseModel.Vacancy" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Companies">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Vacancies">
+        <PropertyRef Name="CompanyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="WorkFlowDatabaseEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Companies" EntityType="WorkFlowDatabaseModel.Company" />
+    <EntitySet Name="Vacancies" EntityType="WorkFlowDatabaseModel.Vacancy" />
+    <AssociationSet Name="FK_Vacancy_ToTable" Association="Self.FK_Vacancy_ToTable">
+      <End Role="Companies" EntitySet="Companies" />
+      <End Role="Vacancies" EntitySet="Vacancies" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
