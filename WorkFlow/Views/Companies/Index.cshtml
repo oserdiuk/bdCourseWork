@@ -26,17 +26,21 @@
                     <ul class="dropdown-menu" role="menu">
 
 
-                        <li class="active">
-                            @Ajax.ActionLink("Po alphavity", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })
+                        <li> @Ajax.ActionLink("По алфавиту (по возрастанию)", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.Sort, tableName = "Companies", fieldToSort="Name" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
+                        <li> @Ajax.ActionLink("По алфавиту (по убыванию)", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc, tableName = "Companies", fieldToSort = "Name" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
 
-                            @*<a><i class="glyphicon glyphicon-sort-by-attributes" style="margin-right: 7px"></i>По алфавиту </a>*@
-                        </li>
+                        <li class="divider"></li>
 
+                        <li> @Ajax.ActionLink("По дате создания компании (по возрастанию)", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.Sort, tableName = "Companies", fieldToSort = "CreatingDate" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
+                        <li> @Ajax.ActionLink("По дате создания компании (по убыванию)", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc, tableName = "Companies", fieldToSort = "CreatingDate" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
+
+                        @*<li><a href="@Ajax.ActionLink("По дате создания компании", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace }, new { @class = "glyphicon glyphicon-sort-by-attributes" })"></a></li>
+                        <li><a href="@Ajax.ActionLink("По дате создания компании", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace }, new { @class = "glyphicon glyphicon-trash" })"></a></li>*@
+                    
                         @*<li class="active">@Html.Action("UpdateTable", "Database", new { context = Model, action = ActionWithTable.Sort })"<i class="glyphicon glyphicon-sort-by-attributes" style="margin-right: 7px"></i>По алфавиту</li>
                             <li class="active">@Html.Action("UpdateTable", "Database", new { context = Model, action = ActionWithTable.SortDesc })"<i class="glyphicon glyphicon-sort-by-attributes-alt" style="margin-right: 7px"></i>По алфавиту</li>*@
-                        <li class="divider"></li>
-                        <li><a href="#"><i class="glyphicon glyphicon-sort-by-attributes" style="margin-right: 7px"></i>По дате создания компании</a></li>
-                        <li><a href="#"><i class="glyphicon glyphicon-sort-by-attributes-alt" style="margin-right: 7px"></i>По дате создания компании</a></li>
+                        @*<li><a href="@Ajax.ActionLink("По дате создания компании", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace }, new { @class = "glyphicon glyphicon-sort-by-attributes" })"></a></li>
+                        <li><a href="@Ajax.ActionLink("По дате создания компании", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace }, new { @class = "glyphicon glyphicon-trash" })"></a></li>*@
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -73,7 +77,7 @@
 </nav>
 
 <div id="divResponse">
-    @Html.Partial("_CompaniesListPartial")
+    @Html.Partial("_CompaniesListPartial", Model)
 </div>
 @*<table class="table">
         <tr>
