@@ -27,8 +27,6 @@ namespace WorkFlow.Controllers
                 SqlConnection sqlconn = new SqlConnection(connString);
                 sqlconn.Open();
                 context.Companies = sqlconn.Query<Companies>("SELECT * FROM Companies").ToList();
-                //SqlDataAdapter oda = new SqlDataAdapter("SELECT * FROM Companies", sqlconn);
-                //oda.Fill(ds);
 
                 sqlconn.Close();
             }

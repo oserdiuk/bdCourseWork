@@ -5,6 +5,7 @@ namespace WorkFlow.Models.DataBaseModels
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Web.Mvc;
 
     public partial class Companies
     {
@@ -16,7 +17,8 @@ namespace WorkFlow.Models.DataBaseModels
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Необходимо ввести название компании.")]
-        [Display(Name = "Название компании*")]
+        [Remote("doesUserNameExist", "Account", HttpMethod = "POST", ErrorMessage = "User name already exists. Please enter a different user name.")]
+        [Display(Name = "Название компании (Логин)*")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Необходимо ввести адрес офиса.")]
@@ -32,7 +34,7 @@ namespace WorkFlow.Models.DataBaseModels
         public string City { get; set; }
 
         [Required(ErrorMessage = "Необходимо ввести адрес электронной почты.")]
-        [EmailAddress]
+        [DataType(DataType.EmailAddress)]
         [Display(Name = "E-mail")]
         public string Email { get; set; }
 
@@ -49,10 +51,6 @@ namespace WorkFlow.Models.DataBaseModels
         [Column(TypeName = "date")]
         [Display(Name = "День рождения компании")]
         public DateTime? CreatingDate { get; set; }
-
-        [MinLength(6, ErrorMessage="Длина пароля должна быть больше 6 символов.")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
 
         public virtual ICollection<Vacancies> Vacancies { get; set; }
     }

@@ -11,9 +11,17 @@ using Microsoft.Owin.Security;
 using WorkFlow.Models;
 using WorkFlow.Models.DataBaseModels;
 using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+using Dapper;
 
 namespace WorkFlow.Controllers
 {
+    public enum SignUpResult
+    {
+        Success, WrongPassword, ExistedEmail, ExistedName, SignInError
+    }
+
     [Authorize]
     public class AccountController : Controller
     {
@@ -24,7 +32,7 @@ namespace WorkFlow.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,12 +42,6 @@ namespace WorkFlow.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RegisterCompany(RegisterCompanyModel model)
-        {
-            var res = await RegisterUser(model as Object);
-            return res;
-        }
-
         public async Task<ActionResult> RegisterUser(Object model)
         {
             if (ModelState.IsValid)
@@ -47,25 +49,38 @@ namespace WorkFlow.Controllers
                 RegisterCompanyModel modelCompany = model as RegisterCompanyModel;
                 var modelRegView = modelCompany.RegModel;
 
-                //var user = new ApplicationUser { UserName = modelCompany.Company.Name, Email = modelRegView.Email };
-                //var result = await UserManager.CreateAsync(user, modelRegView.Password);
+                string connString = ConfigurationManager.ConnectionStrings["DatabaseModel1"].ConnectionString;
 
-                SignUpResult companyRegisterResult = CompanyAccountModel.RegisterCompany(modelCompany);
+                Companies company = modelCompany.Company;
+                SignUpResult regCompanyResult = SignUpResult.Success;
+                using (SqlConnection sqlconn = new SqlConnection(connString))
+                {
+                    sqlconn.Open();
 
-                if (companyRegisterResult == SignUpResult.Success)
-                    //if (result.Succeeded & companyRegisterResult)
+                    if (sqlconn.Query<Companies>("SELECT * FROM Companies WHERE Email = '" + company.Email + "'").Count() != 0)
                     {
-                    //var currentUser = UserManager.FindByName(user.UserName);
-                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        regCompanyResult = SignUpResult.ExistedEmail;
+                    }
 
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    if (regCompanyResult == SignUpResult.Success)
+                    {
+                        var user = new ApplicationUser { UserName = modelCompany.Company.Email, Email = modelRegView.Email };
+                        var result = await UserManager.CreateAsync(user, modelRegView.Password);
+                       
+                        if (result.Succeeded)
+                        {
+                            SqlCommand cmd = new SqlCommand(String.Format("INSERT INTO Companies (Name, Address, Website, City, Email, Phone, PropertyForm, CreatingDate, Password) values (N'{0]', N'{1]', N'{2]', N'{3]', N'{4]', N'{5]', N'{6]', N'{7]', N'{8}')", company.Name, company.Address, company.Website, company.City, company.Email, company.Phone, company.PropertyForm, company.CreatingDate), sqlconn);
+                            cmd.ExecuteNonQuery(); 
+                            var currentUser = UserManager.FindByName(user.UserName);
+                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        }
 
-                    return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Home");
+                    }
+                    
                 }
+
+               
                 //AddErrors(result);
             }
             return View(model);
@@ -77,9 +92,9 @@ namespace WorkFlow.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -109,7 +124,7 @@ namespace WorkFlow.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(string login, string password)
+        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -134,36 +149,6 @@ namespace WorkFlow.Controllers
             }
         }
 
-        ////
-        //// POST: /Account/Login
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-
-        //    // This doesn't count login failures towards account lockout
-        //    // To enable password failures to trigger account lockout, change to shouldLockout: true
-        //    var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-        //    switch (result)
-        //    {
-        //        case SignInStatus.Success:
-        //            return RedirectToLocal(returnUrl);
-        //        case SignInStatus.LockedOut:
-        //            return View("Lockout");
-        //        case SignInStatus.RequiresVerification:
-        //            return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-        //        case SignInStatus.Failure:
-        //        default:
-        //            ModelState.AddModelError("", "Invalid login attempt.");
-        //            return View(model);
-        //    }
-        //}
-
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
@@ -185,8 +170,8 @@ namespace WorkFlow.Controllers
         {
             return View();
         }
-     
-      
+
+
         //
         // GET: /Account/ForgotPassword
         [AllowAnonymous]
