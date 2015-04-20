@@ -69,6 +69,7 @@ E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\
 E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\Dapper.dll
 E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\EntityFramework.dll
 E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\EntityFramework.SqlServer.dll
+E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\JuiceUI.dll
 E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\Microsoft.AspNet.Identity.Core.dll
 E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\Microsoft.AspNet.Identity.EntityFramework.dll
 E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\Microsoft.AspNet.Identity.Owin.dll

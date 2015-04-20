@@ -14,27 +14,13 @@ namespace WorkFlow.Controllers
     public class CompaniesController : Controller
     {
 
-        DBContext context = new DBContext();
-        DataSet ds = new DataSet();
-
-        string connString = System.Configuration.ConfigurationManager.ConnectionStrings["DatabaseModel1"].ConnectionString;
-
         // GET: Companies
         public ActionResult Index()
         {
-            try
-            {
-                SqlConnection sqlconn = new SqlConnection(connString);
-                sqlconn.Open();
-                context.Companies = sqlconn.Query<Companies>("SELECT * FROM Companies").ToList();
-
-                sqlconn.Close();
-            }
-            catch (Exception ex)
-            {
-                //System.Web.HttpContext.Current.Response.Write("<SCRIPT LANGUAGE=""JavaScript"">alert("Hello this is an Alert")</SCRIPT>")
-            }
-
+            DBContext context  = new DBContext();
+            context.Companies = DatabaseController.DoSQL<Companies>("SELECT * FROM Companies");
+            ViewBag.Companies = context.Companies;
+            ViewBag.Cities = DatabaseController.GetCities();
             return View(context);
         }
     }

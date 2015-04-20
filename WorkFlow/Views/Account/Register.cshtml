@@ -1,22 +1,18 @@
 ﻿@model WorkFlow.Models.RegisterCompanyModel
-
 @{
     ViewBag.Title = "Регистрация";
 }
-
 <h2>@ViewBag.Title.</h2>
-
-@using (Html.BeginForm("RegisterUser", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Заполните форму. Поля обозначенные звездочкой обезательные для заполнения.</h4>
     <hr />
-    @Html.ValidationSummary("", new { @class = "text-danger" })
-
     <div class="form-group">
         @Html.LabelFor(m => m.Company.Name, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.Company.Name, new { @class = "form-control" })
+            <div style="color:#ff1b1b">@Html.ValidationMessageFor(model => model.Company.Name)</div>
         </div>
     </div>
 
@@ -31,6 +27,7 @@
         @Html.LabelFor(m => m.Company.Website, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.Company.Website, new { @class = "form-control" })
+            <div style="color:#ff1b1b">@Html.ValidationMessageFor(model => model.Company.Website)</div>
         </div>
     </div>
 
@@ -45,13 +42,35 @@
         @Html.LabelFor(m => m.Company.Phone, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.Company.Phone, new { @class = "form-control" })
+            <div style="color:#ff1b1b">@Html.ValidationMessageFor(model => model.Company.Phone)</div>
+        </div>
+    </div>
+
+    List<SelectListItem> items = new List<SelectListItem>();
+    items.Add(new SelectListItem { Text = "государственная", Value = "0" });
+    items.Add(new SelectListItem { Text = "частная", Value = "1" });
+    <div class="form-group">
+        @Html.LabelFor(m => m.Company.PropertyForm, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.Company.PropertyForm, items, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Company.CreatingDate, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Company.CreatingDate, new { @class = "form-control datepicker", placeholder = "mm/dd/yyyy"})
+            <div style="color:#ff1b1b">
+                @Html.ValidationMessageFor(model => model.Company.CreatingDate)
+            </div>
         </div>
     </div>
 
     <div class="form-group">
         @Html.LabelFor(m => m.RegModel.Email, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Company.Email, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.RegModel.Email, new { @class = "form-control" })
+            <div style="color:#ff1b1b">@Html.ValidationMessageFor(model => model.RegModel.Email)</div>
         </div>
     </div>
 
@@ -59,21 +78,23 @@
         @Html.LabelFor(m => m.RegModel.Password, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.PasswordFor(m => m.RegModel.Password, new { @class = "form-control" })
+            <div style="color:#ff1b1b">@Html.ValidationMessageFor(model => model.RegModel.Password)</div>
+
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.RegModel.ConfirmPassword, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.PasswordFor(m => m.RegModel.ConfirmPassword, new { @class = "form-control" })
+            <div style="color:#ff1b1b">@Html.ValidationMessageFor(model => model.RegModel.ConfirmPassword)</div>
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" onclick="window.location.href='@Url.Action("RegisterUser", "Account")';" value="Register" />
+            <input type="submit" class="btn btn-default" value="Register" />
         </div>
     </div>
 }
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

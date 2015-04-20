@@ -65,7 +65,7 @@ namespace WorkFlow.Models
 
     public class RegisterViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Необходимо ввести адрес электронной почты.")]
         [EmailAddress]
         [Display(Name = "E-mail*")]
         public string Email { get; set; }

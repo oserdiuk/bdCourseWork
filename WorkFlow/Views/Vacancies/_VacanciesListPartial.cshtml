@@ -1,0 +1,32 @@
+﻿@model WorkFlow.Models.DataBaseModels.DBContext
+
+@{
+    ViewBag.Title = "_VacanciesListPartial";
+}
+
+<table class="table table-hover" id="companyTable">
+    <thead>
+        <tr>
+            <th>Название компании</th>
+            <th>Город</th>
+            <th>E-mail</th>
+            <th>Адрес</th>
+            <th>Телефон</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var a in Model.Vacancies)
+            {
+                <tr>
+                    <td>@a.Name</td>
+                    <td>@(Model.Companies.FirstOrDefault(c => c.Id == a.CompanyId)).Name</td>
+                    <td>@a.OpenDate</td>
+                    <td>@a.Amount</td>
+                    <td>@Html.ActionLink("Edit", "Edit", new { id = a.Id }) </td>
+
+                </tr>
+            }
+        }
+    </tbody>
+</table>

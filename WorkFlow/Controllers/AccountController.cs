@@ -42,11 +42,10 @@ namespace WorkFlow.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RegisterUser(Object model)
+        public async Task<ActionResult> Register(RegisterCompanyModel modelCompany)
         {
             if (ModelState.IsValid)
             {
-                RegisterCompanyModel modelCompany = model as RegisterCompanyModel;
                 var modelRegView = modelCompany.RegModel;
 
                 string connString = ConfigurationManager.ConnectionStrings["DatabaseModel1"].ConnectionString;
@@ -57,33 +56,41 @@ namespace WorkFlow.Controllers
                 {
                     sqlconn.Open();
 
-                    if (sqlconn.Query<Companies>("SELECT * FROM Companies WHERE Email = '" + company.Email + "'").Count() != 0)
+                    if (sqlconn.Query<Companies>("SELECT * FROM Companies WHERE Email = '" + modelRegView.Email + "'").Count() != 0)
                     {
                         regCompanyResult = SignUpResult.ExistedEmail;
                     }
 
                     if (regCompanyResult == SignUpResult.Success)
                     {
-                        var user = new ApplicationUser { UserName = modelCompany.Company.Email, Email = modelRegView.Email };
+                        var user = new ApplicationUser
+                        {
+                            UserName = modelRegView.Email,
+                            Email = modelRegView.Email,
+                        };
+
                         var result = await UserManager.CreateAsync(user, modelRegView.Password);
-                       
+
                         if (result.Succeeded)
                         {
-                            SqlCommand cmd = new SqlCommand(String.Format("INSERT INTO Companies (Name, Address, Website, City, Email, Phone, PropertyForm, CreatingDate, Password) values (N'{0]', N'{1]', N'{2]', N'{3]', N'{4]', N'{5]', N'{6]', N'{7]', N'{8}')", company.Name, company.Address, company.Website, company.City, company.Email, company.Phone, company.PropertyForm, company.CreatingDate), sqlconn);
-                            cmd.ExecuteNonQuery(); 
+                            SqlCommand cmd = new SqlCommand(String.Format("INSERT INTO Companies (Name, Address, Website, City, Email, Phone, PropertyForm, CreatingDate) values (N'{0}', N'{1}', N'{2}', N'{3}', N'{4}', N'{5}', N'{6}', N'{7}')", company.Name, company.Address, company.Website, company.City, modelRegView.Email, company.Phone, company.PropertyForm, company.CreatingDate), sqlconn);
+                            cmd.ExecuteNonQuery();
                             var currentUser = UserManager.FindByName(user.UserName);
                             await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        }
+                            return RedirectToAction("Index", "Home");
 
-                        return RedirectToAction("Index", "Home");
+                        }
+                        AddErrors(result);
+
+
                     }
-                    
+
                 }
 
-               
+
                 //AddErrors(result);
             }
-            return View(model);
+            return View(modelCompany);
         }
 
         public ApplicationSignInManager SignInManager
@@ -133,15 +140,13 @@ namespace WorkFlow.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, false, shouldLockout: true);
             switch (result)
             {
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return PartialView("Lockout");
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
@@ -168,6 +173,9 @@ namespace WorkFlow.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            //var regModel = new RegisterCompanyModel();
+            //regModel.Company = new Companies();
+            //regModel.RegModel = new RegisterViewModel();
             return View();
         }
 

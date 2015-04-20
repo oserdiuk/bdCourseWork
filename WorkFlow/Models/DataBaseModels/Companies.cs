@@ -7,7 +7,7 @@ namespace WorkFlow.Models.DataBaseModels
     using System.Data.Entity.Spatial;
     using System.Web.Mvc;
 
-    public partial class Companies
+    public class Companies
     {
         public Companies()
         {
@@ -17,7 +17,8 @@ namespace WorkFlow.Models.DataBaseModels
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Необходимо ввести название компании.")]
-        [Remote("doesUserNameExist", "Account", HttpMethod = "POST", ErrorMessage = "User name already exists. Please enter a different user name.")]
+        //!!!!!!!
+        //[Remote("doesUserNameExist", "Account", HttpMethod = "POST", ErrorMessage = "User name already exists. Please enter a different user name.")]
         [Display(Name = "Название компании (Логин)*")]
         public string Name { get; set; }
 
@@ -33,9 +34,8 @@ namespace WorkFlow.Models.DataBaseModels
         [Display(Name = "Город*")]
         public string City { get; set; }
 
-        [Required(ErrorMessage = "Необходимо ввести адрес электронной почты.")]
-        [DataType(DataType.EmailAddress)]
         [Display(Name = "E-mail")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Display(Name = "Контактный телефон")]
@@ -48,7 +48,9 @@ namespace WorkFlow.Models.DataBaseModels
         [StringLength(50)]
         public string PropertyForm { get; set; }
 
-        [Column(TypeName = "date")]
+        //[Column(TypeName = "date")]
+
+        [DataType(DataType.Date, ErrorMessage="Введите дату в виде месяц/день/год")]
         [Display(Name = "День рождения компании")]
         public DateTime? CreatingDate { get; set; }
 

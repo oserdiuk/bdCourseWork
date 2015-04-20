@@ -11,6 +11,8 @@ namespace WorkFlow.Models.DataBaseModels
         public DBContext()
             : base("name=DatabaseModel1")
         {
+            this.Companies = new List<Companies>();
+            this.Vacancies = new List<Vacancies>();
         }
 
         public virtual List<Categories> Categories { get; set; }

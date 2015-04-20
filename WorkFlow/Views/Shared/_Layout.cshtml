@@ -12,7 +12,7 @@
 </head>
 <body class="mainBGColor">
 
-    <div class="header" >
+    <div class="header">
         <div class="headerMain relative-position">
 
         </div>
@@ -23,13 +23,12 @@
             <ul class="nav navbar-nav">
                 <li class="active">@Html.ActionLink("Home", "Index", "Home")</li>
                 <li class="active">@Html.ActionLink("Компании", "Index", "Companies")</li>
+                <li class="active">@Html.ActionLink("Vacancy", "Index", "Vacancies")</li>
                 <li>@Html.ActionLink("About", "About", "Home")</li>
 
             </ul>
-            @Html.Partial("_LoginPartial")
-            <form class="navbar-form navbar-right pull-right">
-                <input type="text" class="form-control col-lg-8" placeholder="Search ">
-                        </form>
+            @Html.Partial("_LoginPartial", new WorkFlow.Models.LoginViewModel())
+
         </div>
         @*<div class="mainmenu">
                 <ul class="nav navbar-nav">

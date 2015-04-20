@@ -1,4 +1,6 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@model WorkFlow.Models.LoginViewModel
+
+@using Microsoft.AspNet.Identity
 <ul class="nav navbar-nav navbar-right pull-right">
 
     @if (Request.IsAuthenticated)
@@ -10,9 +12,10 @@
             <ul class="nav navbar-nav" style="margin-right:25px">
 
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Вы вошли как @User.Identity.GetUserName(). <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Вы вошли с эл. адреса @User.Identity.GetUserName(). <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>@Html.ActionLink("Редактировать профиль", "Index", "Manage")</li>
+                        <li>@Html.ActionLink("Мои вакансии", "Index", "Manage")</li>
                         <li class="divider"></li>
                         <li><a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a></li>
 
@@ -24,15 +27,22 @@
     else
     {
         <li>@Html.ActionLink("Зарегистрироватся", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        @*<li>@Html.ActionLink("Войти", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>*@
+        
+
+
     <li class="dropdown">
         <a class="dropdown-toggle" href="#" data-toggle="dropdown"> Войти <strong class="caret"></strong></a>
         <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-            <form method="post" action="login" accept-charset="UTF-8" style="margin-bottom:5px">
-                <input style="margin-bottom: 15px; border-color: #345054; border-width:thin" type="text" placeholder=" Логин" id="username" name="username">
-                <input style="margin-bottom: 15px; border-color: #345054; border-width:thin" type="password" placeholder=" Пароль" id="password" name="password">
-                <input class="btn btn-primary btn-block" type="submit" onclick="window.location.href='@Url.Action("Login", "Account")';" id="sign-in" value=" Войти">
-              
+            <form method="post" action="@Url.Action("Login", "Account")" accept-charset="UTF-8" style="margin-bottom:5px" >
+                @Html.AntiForgeryToken()
+                <div style ="margin-bottom: 15px; border-color: #345054; border-width:thin">
+                    @Html.EditorFor(m => m.Email, "Название компании")
+                    @Html.EditorFor(m => m.Password, "Пароль")
+                </div>
+                @*<input  type="text" placeholder=" E-mail" id="email" name="email">
+                <input style="margin-bottom: 15px; border-color: #345054; border-width:thin" type="password" placeholder=" Пароль" id="password" name="password">*@
+                <input class="btn btn-primary btn-block" type="submit"  id="sign-in" value=" Войти">
+
             </form>
         </div>
     </li>
