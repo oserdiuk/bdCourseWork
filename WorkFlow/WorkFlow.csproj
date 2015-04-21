@@ -172,6 +172,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CompaniesController.cs" />
+    <Compile Include="Controllers\CompanyInfoController.cs" />
     <Compile Include="Controllers\DatabaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Images\12.jpg" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\companyHome.jpg">
@@ -385,6 +387,8 @@
     <Content Include="Views\Companies\_CompaniesFilterFormPartial.cshtml" />
     <Content Include="Views\Vacancies\Index.cshtml" />
     <Content Include="Views\Vacancies\_VacanciesListPartial.cshtml" />
+    <Content Include="Views\Manage\EditInformationAbout.cshtml" />
+    <Content Include="Views\CompanyInfo\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

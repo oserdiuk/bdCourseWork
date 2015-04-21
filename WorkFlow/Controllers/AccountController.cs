@@ -51,29 +51,29 @@ namespace WorkFlow.Controllers
                 string connString = ConfigurationManager.ConnectionStrings["DatabaseModel1"].ConnectionString;
 
                 Companies company = modelCompany.Company;
-                SignUpResult regCompanyResult = SignUpResult.Success;
+                //SignUpResult regCompanyResult = SignUpResult.Success;
                 using (SqlConnection sqlconn = new SqlConnection(connString))
                 {
                     sqlconn.Open();
 
-                    if (sqlconn.Query<Companies>("SELECT * FROM Companies WHERE Email = '" + modelRegView.Email + "'").Count() != 0)
-                    {
-                        regCompanyResult = SignUpResult.ExistedEmail;
-                    }
+                    //if (sqlconn.Query<Companies>("SELECT * FROM Companies WHERE Email = '" + modelRegView.Email + "'").Count() != 0)
+                    //{
+                    //    regCompanyResult = SignUpResult.ExistedEmail;
+                    //}
 
-                    if (regCompanyResult == SignUpResult.Success)
-                    {
+                    //if (regCompanyResult == SignUpResult.Success)
+                    //{
                         var user = new ApplicationUser
                         {
                             UserName = modelRegView.Email,
-                            Email = modelRegView.Email,
+                            Email = company.Email,
                         };
 
                         var result = await UserManager.CreateAsync(user, modelRegView.Password);
 
                         if (result.Succeeded)
                         {
-                            SqlCommand cmd = new SqlCommand(String.Format("INSERT INTO Companies (Name, Address, Website, City, Email, Phone, PropertyForm, CreatingDate) values (N'{0}', N'{1}', N'{2}', N'{3}', N'{4}', N'{5}', N'{6}', N'{7}')", company.Name, company.Address, company.Website, company.City, modelRegView.Email, company.Phone, company.PropertyForm, company.CreatingDate), sqlconn);
+                            SqlCommand cmd = new SqlCommand(String.Format("INSERT INTO Companies (Name, Address, Website, City, Email, Phone, PropertyForm, CreatingDate) values (N'{0}', N'{1}', N'{2}', N'{3}', N'{4}', N'{5}', N'{6}', N'{7}')", company.Name, company.Address, company.Website, company.City, company.Email, company.Phone, company.PropertyForm, company.CreatingDate), sqlconn);
                             cmd.ExecuteNonQuery();
                             var currentUser = UserManager.FindByName(user.UserName);
                             await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -81,9 +81,7 @@ namespace WorkFlow.Controllers
 
                         }
                         AddErrors(result);
-
-
-                    }
+                    //}
 
                 }
 

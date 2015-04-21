@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WorkFlow.Models;
+using WorkFlow.Models.DataBaseModels;
 
 namespace WorkFlow.Controllers
 {
@@ -74,6 +75,32 @@ namespace WorkFlow.Controllers
             };
             return View(model);
         }
+
+        public async Task<ActionResult> EditInformationAbout(IndexViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            Companies companyModel = DatabaseController.DoSQL<Companies>("Select * From Companies Where Email = '" + user.Email + "';").FirstOrDefault();
+
+            return View(companyModel); ;
+        }
+
+        public async Task<ActionResult> Edit(Companies company)
+        {
+            DatabaseController.DoSQL<Companies>(String.Format(@"UPDATE Companies SET Name = N'{0}', Address = N'{1}', Website = N'{2}', City = N'{3}', Email = N'{4}', Phone = N'{5}', PropertyForm = N'{6}', CreatingDate = N'{7}' WHERE Id =  N'{8}';", company.Name, company.Address, company.Website, company.City, company.Email, company.Phone, company.PropertyForm, company.CreatingDate, company.Id));
+            return View("EditInformationAbout", company); ;
+        }
+
+
+
+
+
+
+
 
         //
         // POST: /Manage/RemoveLogin

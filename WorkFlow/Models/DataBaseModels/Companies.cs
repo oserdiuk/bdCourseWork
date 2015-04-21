@@ -34,7 +34,8 @@ namespace WorkFlow.Models.DataBaseModels
         [Display(Name = "Город*")]
         public string City { get; set; }
 
-        [Display(Name = "E-mail")]
+        [Required(ErrorMessage = "Необходимо ввести E-mail, который будет отображатся в информации о Ваших вакансиях.")]
+        [Display(Name = "E-mail (контакты)*")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
@@ -52,7 +53,7 @@ namespace WorkFlow.Models.DataBaseModels
 
         [DataType(DataType.Date, ErrorMessage="Введите дату в виде месяц/день/год")]
         [Display(Name = "День рождения компании")]
-        public DateTime? CreatingDate { get; set; }
+        public DateTime CreatingDate { get; set; }
 
         public virtual ICollection<Vacancies> Vacancies { get; set; }
     }
