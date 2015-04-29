@@ -8,10 +8,9 @@
     <thead>
         <tr>
             <th>Название вакансии</th>
-            <th>НАзвание компании</th>
-            <th>Дата открытия компании</th>
+            <th>Название компании</th>
+            <th>Дата открытия вакансии</th>
             <th>Кол-во позиций</th>
-            <th>Телефон</th>
         </tr>
     </thead>
     <tbody>
@@ -20,10 +19,10 @@
             {
                 <tr>
                     <td>@a.Name</td>
-                    <td>@(Model.Companies.FirstOrDefault(c => c.Id == a.CompanyId)).Name</td>
-                    <td>@a.OpenDate</td>
+                    <td>@WorkFlow.Controllers.DatabaseController.GetCompanyById(a.CompanyId).Name</td>
+                    <td>@a.OpenDate.Value.Day.@a.OpenDate.Value.Month.@a.OpenDate.Value.Year</td>
                     <td>@a.Amount</td>
-                    <td>@Html.ActionLink("Edit", "Edit", new { id = a.Id }) </td>
+                    @*<td>@Html.ActionLink("Edit", "Edit", new { id = a.Id }) </td>*@
 
                 </tr>
             }

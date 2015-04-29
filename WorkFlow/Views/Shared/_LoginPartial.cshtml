@@ -16,6 +16,7 @@
                     <ul class="dropdown-menu">
                         <li>@Html.ActionLink("Редактировать профиль", "Index", "Manage")</li>
                         <li>@Html.ActionLink("Мои вакансии", "Index", "Manage")</li>
+                        <li>@Ajax.ActionLink("Add new vacancy", "Create", "Vacancies", new { email = @User.Identity.GetUserName() }, new { HttpRequest = "Post"})</li>
                         <li class="divider"></li>
                         <li><a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a></li>
 

@@ -9,6 +9,8 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+
 </head>
 <body class="mainBGColor">
 
@@ -24,7 +26,8 @@
                 <li class="active">@Html.ActionLink("Home", "Index", "Home")</li>
                 <li class="active">@Html.ActionLink("Компании", "Index", "Companies")</li>
                 <li class="active">@Html.ActionLink("Vacancy", "Index", "Vacancies")</li>
-                <li>@Html.ActionLink("About", "About", "Home")</li>
+                <li class="active">@Html.ActionLink("Query editor", "Index", "QueryEditor")</li>
+                <li class="active">@Html.ActionLink("Search", "Index", "Search")</li>
 
             </ul>
             @Html.Partial("_LoginPartial", new WorkFlow.Models.LoginViewModel())

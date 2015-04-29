@@ -14,19 +14,17 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using Dapper;
+using System.IO;
 
 namespace WorkFlow.Controllers
 {
-    public enum SignUpResult
-    {
-        Success, WrongPassword, ExistedEmail, ExistedName, SignInError
-    }
 
     [Authorize]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private const string DefaultLogoName = "anon.jpg";
 
         public AccountController()
         {
@@ -51,18 +49,10 @@ namespace WorkFlow.Controllers
                 string connString = ConfigurationManager.ConnectionStrings["DatabaseModel1"].ConnectionString;
 
                 Companies company = modelCompany.Company;
-                //SignUpResult regCompanyResult = SignUpResult.Success;
                 using (SqlConnection sqlconn = new SqlConnection(connString))
                 {
                     sqlconn.Open();
 
-                    //if (sqlconn.Query<Companies>("SELECT * FROM Companies WHERE Email = '" + modelRegView.Email + "'").Count() != 0)
-                    //{
-                    //    regCompanyResult = SignUpResult.ExistedEmail;
-                    //}
-
-                    //if (regCompanyResult == SignUpResult.Success)
-                    //{
                         var user = new ApplicationUser
                         {
                             UserName = modelRegView.Email,
@@ -73,6 +63,11 @@ namespace WorkFlow.Controllers
 
                         if (result.Succeeded)
                         {
+                            company.Logo = DefaultLogoName;
+                            if (company.CreatingDate == null)
+                            {
+                                company.CreatingDate = DateTime.Now;
+                            }
                             SqlCommand cmd = new SqlCommand(String.Format("INSERT INTO Companies (Name, Address, Website, City, Email, Phone, PropertyForm, CreatingDate) values (N'{0}', N'{1}', N'{2}', N'{3}', N'{4}', N'{5}', N'{6}', N'{7}')", company.Name, company.Address, company.Website, company.City, company.Email, company.Phone, company.PropertyForm, company.CreatingDate), sqlconn);
                             cmd.ExecuteNonQuery();
                             var currentUser = UserManager.FindByName(user.UserName);
@@ -91,6 +86,7 @@ namespace WorkFlow.Controllers
             return View(modelCompany);
         }
 
+        
         public ApplicationSignInManager SignInManager
         {
             get

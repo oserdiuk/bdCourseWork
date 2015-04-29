@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "Компании";
-
+    ViewBag.FilterCompanySucceed = false;
 }
 <script src="~/Scripts/MicrosoftMvcAjax.js" type="text/javascript"></script>
 
@@ -33,22 +33,17 @@
 
                         <li> @Ajax.ActionLink("По дате создания компании (по возрастанию)", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.Sort, tableName = "Companies", fieldToSort = "CreatingDate" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
                         <li> @Ajax.ActionLink("По дате создания компании (по убыванию)", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc, tableName = "Companies", fieldToSort = "CreatingDate" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
-
-                        @*<li><a href="@Ajax.ActionLink("По дате создания компании", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace }, new { @class = "glyphicon glyphicon-sort-by-attributes" })"></a></li>
-                        <li><a href="@Ajax.ActionLink("По дате создания компании", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace }, new { @class = "glyphicon glyphicon-trash" })"></a></li>*@
-                    
-                        @*<li class="active">@Html.Action("UpdateTable", "Database", new { context = Model, action = ActionWithTable.Sort })"<i class="glyphicon glyphicon-sort-by-attributes" style="margin-right: 7px"></i>По алфавиту</li>
-                            <li class="active">@Html.Action("UpdateTable", "Database", new { context = Model, action = ActionWithTable.SortDesc })"<i class="glyphicon glyphicon-sort-by-attributes-alt" style="margin-right: 7px"></i>По алфавиту</li>*@
-                        @*<li><a href="@Ajax.ActionLink("По дате создания компании", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace }, new { @class = "glyphicon glyphicon-sort-by-attributes" })"></a></li>
-                        <li><a href="@Ajax.ActionLink("По дате создания компании", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace }, new { @class = "glyphicon glyphicon-trash" })"></a></li>*@
                     </ul>
                 </li>
                 
 
-                 @Html.Partial("_CompaniesFilterFormPartial")
+                 @Html.Partial("_CompaniesFilterFormPartial", new WorkFlow.Models.CompanyFilter())
  
+
+                <li> @Ajax.ActionLink("Statistics", "Statistics", "Companies", new { context = Model, actionNumber = ActionWithTable.Sort, tableName = "Companies", fieldToSort = "Name" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
+
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-stats" style="margin-right: 7px"></i>Статистика<span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-stats" style="margin-right: 7px"></i>...<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#">Action </a></li>
                         <li><a href="#">Another action</a></li>
@@ -71,31 +66,3 @@
 <div id="divResponse">
     @Html.Partial("_CompaniesListPartial", Model)
 </div>
-@*<table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name).ToString().TakeWhile(s=>s=='*')
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Website)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Information)
-            </th>
-            <th></th>
-        </tr>
-
-
-    </table>*@

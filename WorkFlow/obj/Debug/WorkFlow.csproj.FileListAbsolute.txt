@@ -122,4 +122,9 @@ E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\
 E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\obj\Debug\WorkFlow.dll
 E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\obj\Debug\WorkFlow.pdb
-E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\obj\Debug\WorkFlow.csprojResolveAssemblyReference.cache
+E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\System.Net.Http.Formatting.dll
+E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\System.Web.Http.dll
+E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\System.Web.Http.WebHost.dll
+E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\System.Net.Http.Formatting.xml
+E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\System.Web.Http.xml
+E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\System.Web.Http.WebHost.xml

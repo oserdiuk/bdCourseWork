@@ -8,6 +8,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WorkFlow.Models;
 using WorkFlow.Models.DataBaseModels;
+using System.IO;
+using System.Drawing;
 
 namespace WorkFlow.Controllers
 {
@@ -16,6 +18,8 @@ namespace WorkFlow.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+
+        private string PathDirectory = "~/App_Data/Images/";
 
         public ManageController()
         {
@@ -33,9 +37,9 @@ namespace WorkFlow.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -76,27 +80,65 @@ namespace WorkFlow.Controllers
             return View(model);
         }
 
-        public async Task<ActionResult> EditInformationAbout(IndexViewModel model)
+        public ActionResult EditInformationAbout(IndexViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            Companies companyModel = DatabaseController.DoSQL<Companies>("Select * From Companies Where Email = '" + user.Email + "';").FirstOrDefault();
-
-            return View(companyModel); ;
+            var c = GetAuthenticatedCompany();
+            return View(c); ;
         }
 
-        public async Task<ActionResult> Edit(Companies company)
+        public Companies GetAuthenticatedCompany()
         {
-            DatabaseController.DoSQL<Companies>(String.Format(@"UPDATE Companies SET Name = N'{0}', Address = N'{1}', Website = N'{2}', City = N'{3}', Email = N'{4}', Phone = N'{5}', PropertyForm = N'{6}', CreatingDate = N'{7}' WHERE Id =  N'{8}';", company.Name, company.Address, company.Website, company.City, company.Email, company.Phone, company.PropertyForm, company.CreatingDate, company.Id));
-            return View("EditInformationAbout", company); ;
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            var c = DatabaseController.DoSQL<Companies>("Select * From Companies Where Email = '" + user.Email + "';").FirstOrDefault();
+            return c;
+        }
+
+        public ActionResult Edit(Companies company)
+        {
+            DatabaseController.DoSQL<Companies>(String.Format(@"UPDATE Companies SET Name = N'{0}', Address = N'{1}', Website = N'{2}', City = N'{3}', Email = N'{4}', Phone = N'{5}', PropertyForm = N'{6}', CreatingDate = '{7}' WHERE Id =  N'{8}';", company.Name, company.Address, company.Website, company.City, company.Email, company.Phone, company.PropertyForm, company.CreatingDate.ToString(), company.Id));
+            return RedirectToAction("EditInformationAbout", company);
+        }
+
+        [HttpPost]
+        public ActionResult UploadLogo(HttpPostedFileBase file)
+        {
+            string path = "";
+            Companies c = GetAuthenticatedCompany();
+            string imageName = c.Id + ".";
+            try
+            {
+                if (file.ContentLength > 0)
+                {
+                    var fileName = imageName + Path.GetFileName(file.FileName).Split('.').LastOrDefault();
+                    path = Path.Combine(Server.MapPath(PathDirectory), fileName);
+                    file.SaveAs(path);
+                    DatabaseController.DoSQL<Companies>(String.Format(@"UPDATE Companies SET Logo = N'{0}' WHERE Id =  N'{1}';", fileName, c.Id));
+                    c.Logo = fileName;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return RedirectToAction("Edit", c);
         }
 
 
-
+        [HttpPost]
+        public ActionResult DeleteLogo(int id)
+        {
+            Companies company = DatabaseController.GetCompanyById(id);
+            string path = "";
+            path = Path.Combine(Server.MapPath(PathDirectory), company.Logo);
+            System.IO.File.Delete(path); 
+            DatabaseController.DoSQL<Companies>(String.Format(@"UPDATE Companies SET Logo = N'anon.jpg' WHERE Id =  N'{0}';", company.Id));
+            company.Logo = "anon.jpg";
+            return RedirectToAction("Edit", company);
+        }
 
 
 
@@ -358,7 +400,7 @@ namespace WorkFlow.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -409,6 +451,6 @@ namespace WorkFlow.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

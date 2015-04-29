@@ -28,6 +28,11 @@ namespace WorkFlow.Models.DataBaseModels
         [Display(Name = "Количество мест")]
         public int? Amount { get; set; }
 
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+
+        public string FileName { get; set; }
+
         public virtual Companies Companies { get; set; }
 
         public virtual ICollection<Requirements> Requirements { get; set; }
