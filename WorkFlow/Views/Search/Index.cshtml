@@ -1,0 +1,51 @@
+﻿@model WorkFlow.Models.DataBaseModels.DBContext
+
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+}
+  
+<br />
+
+<div>
+    <div class="accordion" id="accordion2">
+        <div class="accordion-group">
+            <div class="accordion-heading ">
+                <a class="accordion-toggle btn btn-default" style="width:100%" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                    Search criteria
+                </a>
+            </div>
+            <div id="collapseOne" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                    <div class="col-md-12">
+                        <span class="col-md-6">
+                            @Html.Partial("_SearchCompanyPartial", new WorkFlow.Models.SearchCompanyCriteria())
+                        </span>
+
+
+
+                        <span class="col-md-6">
+                            @Html.Partial("_SearchVacancyPartial", new WorkFlow.Models.SearchVacancyCriteria())
+                        </span>
+                    </div>
+                    <div class="col-md-12">
+                        <br />
+                        <hr />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<br />
+<div id="searchResult">
+
+</div>

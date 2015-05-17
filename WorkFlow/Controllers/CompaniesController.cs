@@ -32,7 +32,7 @@ namespace WorkFlow.Controllers
             switch (statistic)
             {
                 case Controllers.Statistics.CompanyInCities:
-                    query = "Select Distinct City, Count(Id) From Companies Group by City;";
+                    query = "Select Distinct City as 'City1', City as 'City', Count(Id) as 'Number of companies' From Companies Group by City;";
                     break;
                 case Controllers.Statistics.SkillSForVacancy:
                     break;
@@ -45,6 +45,7 @@ namespace WorkFlow.Controllers
             DBContext context = new DBContext();
             context.DBDataTable = DatabaseController.GetDataTable(query);
             ViewBag.FilterCompanySucceed = true;
+            ViewBag.StatisticCompanySucceed = true;
             return PartialView("~/Views/Companies/_StatisticsPartial.cshtml", context);
         }
 

@@ -1,0 +1,59 @@
+﻿@model WorkFlow.Models.DataBaseModels.DBContext
+@using WorkFlow.Controllers;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<div style="background-color:#5C8D94" class="navbar-collapse collapse navbar-responsive-collapse">
+
+</div>
+<nav class="navbar navbar-default-secondnavbar" style="margin-top: 10px">
+    <div class="container-fluid">
+
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-sort" style="margin-right: 7px"></i>Сортировка<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+
+
+                        <li> @Ajax.ActionLink("Alphabetically (ascending)", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.Sort, tableName = "Vacancies", fieldToSort = "Name" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
+                        <li> @Ajax.ActionLink("Alphabetically (descending)", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc, tableName = "Vacancies", fieldToSort = "Name" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
+
+                        <li class="divider"></li>
+
+                        <li> @Ajax.ActionLink("By opening date (ascending)", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.Sort, tableName = "Vacancies", fieldToSort = "OpenDate" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
+                        <li> @Ajax.ActionLink("By opening date (descending)", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc, tableName = "Vacancies", fieldToSort = "OpenDate" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
+
+                       </ul>
+                </li>
+
+                @Html.Partial("_VacanciesFilterFormPartial", new WorkFlow.Models.VacancyFilter())
+
+
+                <li> @Ajax.ActionLink("Statistics", "Statistics", "Companies", new { context = Model, actionNumber = ActionWithTable.Sort, tableName = "Companies", fieldToSort = "Name" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
+
+
+
+              
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" data-toggle="collapse" data-target="#toCollapse" role="button" aria-expanded="false"><i class="glyphicon glyphicon-search" style="margin-right: 7px"></i>  Search...  <span class="caret"></span></a>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="divResponse">
+    @Html.Partial("_VacanciesListPartial", Model)
+</div>
+

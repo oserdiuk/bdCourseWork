@@ -1,0 +1,39 @@
+﻿@model WorkFlow.Models.DataBaseModels.DBContext
+
+@{
+    ViewBag.Title = "_VacanciesListPartial";
+}
+
+
+<style type="text/css">
+    changeCursor:hover {
+        cursor: pointer;
+    }
+</style>
+
+<table class="table table-hover" id="companyTable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Min value</th>
+            <th>Max Value</th>
+            <th>Unit of measure</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{foreach (var a in Model.Requirements)
+        {
+              WorkFlow.Models.DataBaseModels.Skills skill = WorkFlow.Controllers.DatabaseController.GetSkillById(a.SkillId);
+            <tr>
+                <td>skill.Name</td>
+                <td>@WorkFlow.Controllers.DatabaseController.GetCategoryById(skill.Id).CategoryName</td>
+                <td>@a.MinValue</td>
+                <td>@a.MaxValue</td>
+                <td>@skill.UnitMeasure</td>
+            </tr>
+        }
+        }
+    </tbody>
+</table>
+

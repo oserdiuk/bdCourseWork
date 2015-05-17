@@ -15,8 +15,9 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Вы вошли с эл. адреса @User.Identity.GetUserName(). <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>@Html.ActionLink("Редактировать профиль", "Index", "Manage")</li>
-                        <li>@Html.ActionLink("Мои вакансии", "Index", "Manage")</li>
-                        <li>@Ajax.ActionLink("Add new vacancy", "Create", "Vacancies", new { email = @User.Identity.GetUserName() }, new { HttpRequest = "Post"})</li>
+                        @*<li>@Ajax.ActionLink("Мои вакансии", "ShowVacanciesOf", "Vacancies", new { email = @User.Identity.GetUserName() }, new AjaxOptions { HttpMethod = "POST"})
+                        </li>*@
+                        <li>@Html.ActionLink("Add new vacancy", "Create", "Vacancies")</li>
                         <li class="divider"></li>
                         <li><a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a></li>
 

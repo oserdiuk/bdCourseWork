@@ -26,7 +26,14 @@ namespace WorkFlow
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/style.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/slick*"));
+
+            bundles.Add(new ScriptBundle("~/bundles/slick").Include(
+                 "~/Scripts/jquery.event*",
+          "~/Scripts/SlickGrid/slick*",
+          "~/Scripts/SlickGrid/Plugins/slick*",
+           "~/Scripts/SlickGrid/Controls/slick*"));
         }
     }
 }

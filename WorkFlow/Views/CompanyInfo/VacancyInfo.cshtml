@@ -1,0 +1,78 @@
+﻿@model WorkFlow.Models.DataBaseModels.Vacancies
+
+@{
+    ViewBag.Title = Model.Name + "WorkFlow";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class=" col-md-12">
+    <div class="col-md-offset-1">
+        <div class="col-md-4">
+            <br />
+            <hr />
+            <br />
+
+            <img src='@Url.Action("ShowImage", "Database", new { id = Model.CompanyId })' style="max-width:100%" />
+            <br />
+            <hr />
+            <br />
+        </div>
+        <div class="col-md-7">
+            <h2 class="col-md-offset-1">@Model.Name</h2>
+            <hr />
+            <dl class="dl-horizontal">
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name).ToString().Trim('*')
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayName("Company name:")
+                </dt>
+                <dd>
+                    @WorkFlow.Controllers.DatabaseController.GetCompanyById(Model.CompanyId).Name
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.OpenDate)
+                </dt>
+                <dd>
+                    @Html.DisplayName(String.Format("{0}/{1}/{2}", Model.OpenDate.Day, Model.OpenDate.Month, Model.OpenDate.Year))
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Amount).ToString().Trim('*')
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Requirements)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Requirements)
+                </dd>
+
+                <dt>
+                    @Html.DisplayFor(model => model.Description)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+              
+            </dl>
+        </div>
+        <div class=" col-md-1">
+            <br />
+            @using (Ajax.BeginForm("Download", "Vacancies", new { id = Model.Id }, new AjaxOptions { HttpMethod = "POST" }))
+            {
+                <input type="submit" class="btn" value="Download information" />
+            }
+        </div>
+    </div>
+
+</div>

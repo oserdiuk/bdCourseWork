@@ -1,0 +1,44 @@
+﻿@model WorkFlow.Models.QueryEditorInfo
+
+
+@helper Truncate(string input, int length)
+{
+    if (input.Length <= length)
+    {
+        @input
+    }
+    else
+    {
+        @input.Substring(0, length)<text>...</text>
+    }
+}
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            @{
+                foreach (System.Data.DataColumn col in Model.DateTable.Columns)
+                {
+                    <th>@col.Caption </th>
+                }
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (System.Data.DataRow row in Model.DateTable.Rows)
+            {
+                <tr>
+                    @{
+                foreach (var cell in row.ItemArray)
+                {
+                    <td>
+                        @cell.ToString()
+                    </td>
+                }
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>

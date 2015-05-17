@@ -1,0 +1,23 @@
+﻿@model WorkFlow.Models.QueryEditorInfo
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+}
+
+@using (Ajax.BeginForm("RunQuery", "Database", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group ">
+        @Html.EditorFor(m => m.Query, new { htmlAttributes = new { @class = "form-control", placeholder = "Input your query here..." } })
+        <input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Run">
+    </div>
+
+    <div id="divResponse">
+        @Html.Partial("_QueryListPartial", new WorkFlow.Models.QueryEditorInfo())
+    </div>
+}

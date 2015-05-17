@@ -128,3 +128,7 @@ E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\
 E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\System.Net.Http.Formatting.xml
 E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\System.Web.Http.xml
 E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\System.Web.Http.WebHost.xml
+E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\DataAnnotationsExtensions.ClientValidation.dll
+E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\DataAnnotationsExtensions.dll
+E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\bin\WebActivator.dll
+E:\Documents\2 курс\II семестр\БД\Курсова\WorkFlow\WorkFlow\obj\Debug\WorkFlow.csprojResolveAssemblyReference.cache

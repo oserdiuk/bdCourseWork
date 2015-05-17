@@ -1,10 +1,11 @@
 namespace WorkFlow.Models.DataBaseModels
 {
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Configuration;
+using System.Data.Entity.Spatial;
 
     public partial class Vacancies
     {
@@ -17,14 +18,17 @@ namespace WorkFlow.Models.DataBaseModels
 
         public int CompanyId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Name is required")]
         [Display(Name = "Название вакансии*")]
         public string Name { get; set; }
 
-        [Column(TypeName = "date")]
+        [Required(ErrorMessage = "Date is required")]
+        [DataType(DataType.Date, ErrorMessage = "Wrong date")]
         [Display(Name = "Дата открытия вакансии*")]
-        public DateTime? OpenDate { get; set; }
+        public DateTime OpenDate { get; set; }
 
+        [Range(0, 250, ErrorMessage = "Please enter a number between 0 .")]
+        [DataAnnotationsExtensions.Integer(ErrorMessage = "Please enter a valid number.")]
         [Display(Name = "Количество мест")]
         public int? Amount { get; set; }
 

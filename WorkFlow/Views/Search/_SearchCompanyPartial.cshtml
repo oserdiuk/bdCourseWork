@@ -1,0 +1,47 @@
+﻿@model WorkFlow.Models.SearchCompanyCriteria
+
+<div class="col-md-offset-4">
+    @using (Ajax.BeginForm("SearchForCompany", "Search", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "divResponse" }))
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @value = Model.Name } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control", @value = Model.City } })
+                @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.VacancyName, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.VacancyName, new { htmlAttributes = new { @class = "form-control", @value = Model.VacancyName } })
+                @Html.ValidationMessageFor(model => model.VacancyName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                <br />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8 col-md-offset-2">
+                <input type="submit" id="submitButton" class="btn btn-primary " value="Search company" />
+            </div>
+        </div>
+
+
+    }
+
+</div>
+<div class="col-md-12">
+    <br />
+    <hr />
+</div>

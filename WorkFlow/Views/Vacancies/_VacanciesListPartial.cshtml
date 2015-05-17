@@ -4,28 +4,43 @@
     ViewBag.Title = "_VacanciesListPartial";
 }
 
-<table class="table table-hover" id="companyTable">
+
+<style type="text/css">
+    changeCursor:hover {
+        cursor: pointer;
+    }
+</style>
+
+<table class="table table-hover">
     <thead>
         <tr>
-            <th>Название вакансии</th>
-            <th>Название компании</th>
-            <th>Дата открытия вакансии</th>
-            <th>Кол-во позиций</th>
+            @{
+                for (int i = 2; i < Model.DBDataTable.Columns.Count; i++)
+                {
+                    <th>@Model.DBDataTable.Columns[i].Caption </th>
+                }
+            }
         </tr>
     </thead>
     <tbody>
         @{
-            foreach (var a in Model.Vacancies)
+            foreach (System.Data.DataRow row in Model.DBDataTable.Rows)
             {
-                <tr>
-                    <td>@a.Name</td>
-                    <td>@WorkFlow.Controllers.DatabaseController.GetCompanyById(a.CompanyId).Name</td>
-                    <td>@a.OpenDate.Value.Day.@a.OpenDate.Value.Month.@a.OpenDate.Value.Year</td>
-                    <td>@a.Amount</td>
-                    @*<td>@Html.ActionLink("Edit", "Edit", new { id = a.Id }) </td>*@
+                <tr onclick="location.href = '@(Url.Action("VacancyInfo", "CompanyInfo", new { id = Convert.ToInt32(row.ItemArray[0]) }))'" style="cursor: pointer">
+                    @{
+                for (int i = 2; i < row.ItemArray.Count(); i++)
+                {
+                    <td>
 
+                        @{if (row.ItemArray[i].ToString() != "0")
+                        { @row.ItemArray[i].ToString()}
+                        }
+                    </td>
+                }
+                    }
                 </tr>
             }
         }
     </tbody>
 </table>
+

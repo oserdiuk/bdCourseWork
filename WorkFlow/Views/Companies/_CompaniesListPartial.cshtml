@@ -1,0 +1,98 @@
+﻿@model WorkFlow.Models.DataBaseModels.DBContext
+
+@{
+    ViewBag.Title = "CompanieListPartial";
+}
+
+@helper Truncate(string input, int length)
+{
+    if (input.Length <= length)
+    {
+        @input
+    }
+    else
+    {
+        @input.Substring(0, length)<text>...</text>
+    }
+}
+
+<style type="text/css">
+    changeCursor:hover {
+        cursor: pointer;
+    }
+</style>
+
+@{
+    if (ViewBag.FilterCompanySucceed == true)
+    {<table class="table table-hover">
+        <thead>
+            <tr>
+                @{
+        for (int i = 1; i < Model.DBDataTable.Columns.Count; i++)
+        {
+            <th>@Model.DBDataTable.Columns[i].Caption </th>
+        }
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @{
+        foreach (System.Data.DataRow row in Model.DBDataTable.Rows)
+        {
+            <tr onclick="location.href = '@(Url.Action("Index", "CompanyInfo", new { id = Convert.ToInt32(row.ItemArray[0]) }))'" style="cursor: pointer">
+                @{
+            for (int i = 1; i < row.ItemArray.Count(); i++)
+            {
+                <td>
+
+                    @{if (row.ItemArray[i].ToString() != "0")
+                    { @row.ItemArray[i].ToString()}
+                    }
+                </td>
+            }
+                }
+            </tr>
+        }
+            }
+        </tbody>
+    </table>
+    }
+    else
+    {
+        <table class="table table-hover" id="companyTable">
+            <thead>
+                <tr>
+                    <th>Название компании</th>
+                    <th>Город</th>
+                    <th>E-mail</th>
+                    <th>Адрес</th>
+                    <th>Телефон</th>
+                    <th>Сайт</th>
+                    <th>Форма собственности</th>
+                    <th>День рождения</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{foreach (var a in Model.Companies)
+                {
+                    <tr onclick="location.href = '@(Url.Action("Index", "CompanyInfo", new { id = a.Id }))'" style="cursor: pointer">
+                        <td>@a.Name</td>
+                        <td>@a.City</td>
+                        <td>@a.Email</td>
+                        <td>@Truncate(a.Address, 30)</td>
+                        <td>
+                            @{if (a.Phone != 0)
+                            { @a.Phone}
+                            }
+                        </td>
+                        <td>@a.Website</td>
+                        <td>@a.PropertyForm</td>
+                        <td>@a.CreatingDate.Date.Year</td>
+                    </tr>
+                }
+                }
+            </tbody>
+        </table>
+
+    }
+}

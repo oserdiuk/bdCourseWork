@@ -1,0 +1,34 @@
+﻿@model WorkFlow.Models.VacancyFilter
+
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-filter" style="margin-right: 7px"></i>Фильтрация<span class="caret"></span></a>
+    <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px; color: #f5fdf2; width: 300px">
+        @using (Ajax.BeginForm("FilterVacancy", "Database", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace }))
+        {
+            @Html.AntiForgeryToken()
+            @*<div class="form-group">
+                <label for="textArea" class="col-lg-2 control-label" style="width: auto; text-align:center">Кол-во вакансий</label>
+                @Html.EditorFor(m => m.NumberOfVacancyMin, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(m => m.NumberOfVacancyMax, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label" style="width: auto; text-align:center">Города</label>
+
+                @{List<SelectListItem> items = new List<SelectListItem>();
+                foreach (var v in ViewBag.Cities)
+                {
+                    items.Add(new SelectListItem { Text = v, Value = v });
+                } }
+
+                @Html.ListBoxFor(m => m.City, items, new { @class = "form-control" })
+            </div>*@
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <input type="submit" id="submitButton" class="btn btn-primary" value="UpdateTable" />
+                </div>
+            </div>
+        }
+    </div>
+
+</li>
+

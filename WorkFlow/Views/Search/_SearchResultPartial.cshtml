@@ -1,0 +1,51 @@
+﻿@model WorkFlow.Models.DataBaseModels.DBContext
+
+<style type="text/css">
+    changeCursor:hover {
+        cursor: pointer;
+    }
+</style>
+
+@{
+    if (Model.DBDataTable.Rows.Count != 0)
+    {<table class="table table-hover">
+        <thead>
+            <tr>
+                @{
+        for (int i = 1; i < Model.DBDataTable.Columns.Count; i++)
+        {
+            <th>@Model.DBDataTable.Columns[i].Caption </th>
+        }
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @{
+        foreach (System.Data.DataRow row in Model.DBDataTable.Rows)
+        {
+            <tr onclick="location.href = '@(Url.Action("Index", "CompanyInfo", new { id = Convert.ToInt32(row.ItemArray[0]) }))'" style="cursor: pointer">
+                @{
+            for (int i = 1; i < row.ItemArray.Count(); i++)
+            {
+                <td>
+
+                    @{if (row.ItemArray[i].ToString() != "0")
+                    { @row.ItemArray[i].ToString()}
+                    }
+                </td>
+            }
+                }
+            </tr>
+        }
+            }
+        </tbody>
+    </table>
+    }
+    else
+    {
+        <div >
+            Sorry, no matches found.
+        </div>
+    }
+
+}

@@ -1,0 +1,40 @@
+﻿@model WorkFlow.Models.SearchVacancyCriteria
+
+@using (Ajax.BeginForm("SearchForVacancy", "Search", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "searchResult" }))
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-6" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @value = Model.Skill } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Skill, htmlAttributes: new { @class = "control-label col-md-6" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.Skill, new { htmlAttributes = new { @class = "form-control", @value = Model.Skill } })
+            @Html.ValidationMessageFor(model => model.Skill, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group" style=" visibility:hidden">
+        @Html.LabelFor(model => model.Skill, htmlAttributes: new { @class = "control-label col-md-6" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.Skill, new { htmlAttributes = new { @class = "form-control", @value = Model.Skill } })
+            @Html.ValidationMessageFor(model => model.Skill, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-8">
+            <br />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-8 col-md-offset-2">
+            <input type="submit" id="submitButton" class="btn btn-primary " value="Search vacancy" />
+        </div>
+    </div>
+}
+

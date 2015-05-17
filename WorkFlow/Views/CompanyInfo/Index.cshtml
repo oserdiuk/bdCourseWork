@@ -1,0 +1,96 @@
+﻿@model WorkFlow.Models.DataBaseModels.Companies
+
+@{
+    ViewBag.Title = Model.Name + "WorkFlow";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class=" col-md-12">
+    <div class="col-md-offset-1">
+        <div class="col-md-4">
+            <br />
+            <hr />
+            <br />
+
+            <img src='@Url.Action("ShowImage", "Database", new { id = Model.Id })' style="max-width:100%" />
+            <br />
+            <hr />
+            <br />
+        </div>
+        <div class="col-md-7">
+            <h2 class="col-md-offset-1">@Model.Name</h2>
+            <hr />
+            <dl class="dl-horizontal">
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Address).ToString().Trim('*')
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Address)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Website).ToString().Trim('*')
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Website)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.City).ToString().Trim('*')
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.City)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Email).ToString().Trim('*')
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Phone).ToString().Trim('*')
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Phone)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PropertyForm).ToString().Trim('*')
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PropertyForm)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.CreatingDate).ToString().Trim('*')
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CreatingDate.Year)
+                </dd>
+
+            </dl>
+        </div>
+        <div class=" col-md-1">
+            <br />
+            @using (Ajax.BeginForm("Download", "CompanyInfo", new { id = Model.Id }, new AjaxOptions { HttpMethod = "POST" }))
+            {
+                <input type="submit" class="btn" value="Download information" />
+            }
+        </div>
+    </div>
+
+    <div>
+        @Html.Partial("~/Views/Vacancies/_VacanciesListPartial.cshtml", new WorkFlow.Models.DataBaseModels.DBContext("Select Distinct V.* From Companies C, Vacancies V Where V.CompanyId = " + Model.Id))
+    </div>
+
+</div>

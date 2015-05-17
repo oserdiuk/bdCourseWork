@@ -10,6 +10,9 @@ using WorkFlow.Models;
 using WorkFlow.Models.DataBaseModels;
 using System.IO;
 using System.Drawing;
+using DevExpress.XtraRichEdit;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace WorkFlow.Controllers
 {
@@ -134,7 +137,7 @@ namespace WorkFlow.Controllers
             Companies company = DatabaseController.GetCompanyById(id);
             string path = "";
             path = Path.Combine(Server.MapPath(PathDirectory), company.Logo);
-            System.IO.File.Delete(path); 
+            System.IO.File.Delete(path);
             DatabaseController.DoSQL<Companies>(String.Format(@"UPDATE Companies SET Logo = N'anon.jpg' WHERE Id =  N'{0}';", company.Id));
             company.Logo = "anon.jpg";
             return RedirectToAction("Edit", company);
@@ -399,6 +402,173 @@ namespace WorkFlow.Controllers
 
             base.Dispose(disposing);
         }
+
+
+        #region VacancyCreating
+        string pathToVacancies = @"~/App_Data/";
+
+        [HttpPost]
+        public ActionResult CreateVacancy(Vacancies vacancy)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    vacancy.FileName = "";
+                    AddVacancy(vacancy);
+                }
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public PartialViewResult CreateRequirement(Requirements requirement)
+        {
+            DatabaseController.DoSQL<Requirements>(String.Format(@"INSERT INTO Requirements
+                (VacancyId, SkillId, MinValue, MaxValue) values (0, N'{0}', N'{1}', N'{2}')", requirement.SkillId, requirement.MinValue, requirement.MaxValue));
+            DBContext context = new DBContext();
+            context.Requirements = DatabaseController.DoSQL<Requirements>("Select * From Requirements Where VacancyId = 0");
+            return PartialView("~/Views/QueryEditor/_RequirementsListPartial.cshtml", context);
+        }
+
+
+        public void AddVacancy(Vacancies vacancy)
+        {
+            DatabaseController.DoSQL<Vacancies>(String.Format("INSERT INTO Vacancies (Name, OpenDate, Amount, Description, FileName, CompanyId) values (N'{0}', N'{1}', N'{2}', N'{3}', N'{4}', N'{5}')", vacancy.Name, vacancy.OpenDate, vacancy.Amount, vacancy.Description, vacancy.FileName, GetAuthenticatedCompany().Id));
+        }
+
+        [HttpPost]
+        public ActionResult UploadFileWithVacancies(HttpPostedFileBase file)
+        {
+            string path = "";
+            try
+            {
+                if (file.ContentLength > 0)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+                    path = Path.Combine(Server.MapPath("~/App_Data/Vacancies/"), fileName);
+                    file.SaveAs(path);
+                    ParseFileToVacancy(path);
+                }
+                ViewBag.Message = "Upload successful";
+                return RedirectToAction("Create");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Upload failed";
+                return RedirectToAction("Create");
+            }
+        }
+
+        public void ParseFileToVacancy(string source)
+        {
+            string rtfCode = GetRTFCode(source);
+            List<string> infoFromFile = new List<string>();
+            Regex vacancyDividerExpression = new Regex(@"\[Everything that is between this header and the next one will be referred to one vacancy\](.*?)\[Everything that is between this header and the next one will be referred to one vacancy\]");
+            MatchCollection matchesVac = vacancyDividerExpression.Matches(rtfCode);
+            var vacanciesText = matchesVac.Cast<System.Text.RegularExpressions.Match>().Select(match => match.Value).ToList();
+
+            foreach (var expr in vacanciesText)
+            {
+                string controlPhrase = @"[Everything that is between this header and the next one will be referred to one vacancy]";
+                expr.Remove(expr.IndexOf(controlPhrase), controlPhrase.Length);
+                expr.Remove(expr.LastIndexOf(controlPhrase), controlPhrase.Length);
+
+                Regex searchExpression = new Regex(@"cf[0-9]* [a-zA-Z0-9.,:;!№*( )?%""'/|\+-=@]*");
+                MatchCollection matches = searchExpression.Matches(expr);
+                infoFromFile = matches.Cast<System.Text.RegularExpressions.Match>().Select(match => match.Value).ToList();
+
+                Vacancies vacancy = new Vacancies();
+                for (int i = 0; i < infoFromFile.Count() - 1; i++)
+                {
+                    var temp = infoFromFile[i + 1].Split(' ').ToList();
+                    temp.RemoveAt(0);
+                    var curValue = "";
+                    foreach (var l in temp)
+                    {
+                        curValue += l + " ";
+                    }
+
+                    if (infoFromFile[i].Contains("Vacancy name:"))
+                    {
+                        vacancy.Name = curValue;
+                    }
+                    else if (infoFromFile[i].Contains("Description:"))
+                    {
+                        vacancy.Description = curValue;
+                    }
+                    else if (infoFromFile[i].Contains("Amount of position:"))
+                    {
+                        try
+                        {
+                            vacancy.Amount = Convert.ToInt32(curValue);
+                        }
+                        catch
+                        {
+                            return;
+                        }
+                    }
+                    else if (infoFromFile[i].Contains("Open date:"))
+                    {
+                        try
+                        {
+                            var numbers = curValue.Split('.', '/');
+                            DateTime MyDateTime = new DateTime(Convert.ToInt32(numbers[2]), Convert.ToInt32(numbers[1]), Convert.ToInt32(numbers[0]));
+                            vacancy.OpenDate = MyDateTime;
+                        }
+                        catch
+                        {
+                            return;
+                        }
+                    }
+                }
+
+                vacancy.FileName = Guid.NewGuid().ToString();
+
+                //int id = (DatabaseController.DoSQL<Vacancies>(String.Format(@"Select V.Id From Vacancies V Where V.Name = N'{0}' Order By V.Id;", vacancy.Name))).LastOrDefault().Id;
+                using (RichEditControl rtc = new RichEditControl())
+                {
+                    rtc.RtfText = expr;
+                    rtc.SaveDocument(Server.MapPath(pathToVacancies + "//" + vacancy.FileName + ".rtf"), DocumentFormat.Rtf);
+                }
+
+            }
+        }
+
+
+        public string GetHtmlTextFromRTF(string source)
+        {
+            string html = "";
+            using (RichEditControl richEditControl = new RichEditControl())
+            {
+
+                richEditControl.LoadDocument(source, DocumentFormat.Rtf);
+                html = richEditControl.HtmlText;
+            }
+
+            return html;
+        }
+
+        public string GetRTFCode(string source)
+        {
+            var fileContents = System.IO.File.ReadAllText(source);
+            string rtf = "";
+            using (RichEditControl richEditControl = new RichEditControl())
+            {
+
+                richEditControl.LoadDocument(source, DocumentFormat.Rtf);
+                rtf = richEditControl.RtfText;
+            }
+
+            return rtf;
+        }
+
+        #endregion
+
 
         #region Helpers
         // Used for XSRF protection when adding external logins

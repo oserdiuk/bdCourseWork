@@ -10,7 +10,7 @@
 
 @section scripts{
     @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
-}   
+}
 <div style="background-color:#5C8D94" class="navbar-collapse collapse navbar-responsive-collapse">
 
 </div>
@@ -20,13 +20,12 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-sort" style="margin-right: 7px"></i>Сортировка<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
 
 
-                        <li> @Ajax.ActionLink("По алфавиту (по возрастанию)", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.Sort, tableName = "Companies", fieldToSort="Name" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
+                        <li> @Ajax.ActionLink("По алфавиту (по возрастанию)", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.Sort, tableName = "Companies", fieldToSort = "Name" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
                         <li> @Ajax.ActionLink("По алфавиту (по убыванию)", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc, tableName = "Companies", fieldToSort = "Name" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
 
                         <li class="divider"></li>
@@ -35,33 +34,37 @@
                         <li> @Ajax.ActionLink("По дате создания компании (по убыванию)", "UpdateTable", "Database", new { context = Model, actionNumber = ActionWithTable.SortDesc, tableName = "Companies", fieldToSort = "CreatingDate" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
                     </ul>
                 </li>
-                
 
-                 @Html.Partial("_CompaniesFilterFormPartial", new WorkFlow.Models.CompanyFilter())
- 
+
+                @Html.Partial("_CompaniesFilterFormPartial", new WorkFlow.Models.CompanyFilter())
+
 
                 <li> @Ajax.ActionLink("Statistics", "Statistics", "Companies", new { context = Model, actionNumber = ActionWithTable.Sort, tableName = "Companies", fieldToSort = "Name" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
 
+
+            </ul>
+
+
+
+
+            <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-stats" style="margin-right: 7px"></i>...<span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Action </a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">One more separated link</a></li>
-                    </ul>
+                    <a href="#" data-toggle="collapse" data-target="#toCollapse" role="button" aria-expanded="false"><i class="glyphicon glyphicon-search" style="margin-right: 7px"></i>  Search...  <span class="caret"></span></a>
+
                 </li>
             </ul>
 
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Link</a></li>
-            </ul>
+
         </div>
     </div>
 </nav>
+
+<div id="toCollapse" class="collapse col-md-12">
+
+    @Html.Partial("~/Views/Search/_SearchCompanyPartial.cshtml", new WorkFlow.Models.SearchCompanyCriteria())
+
+</div>
+
 
 <div id="divResponse">
     @Html.Partial("_CompaniesListPartial", Model)
