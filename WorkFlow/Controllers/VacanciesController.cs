@@ -44,16 +44,7 @@ namespace WorkFlow.Controllers
             context.Skills = DatabaseController.DoSQL<Skills>("Select * From Skills");
             ViewBag.Skills = context.Skills;
 
-            Vacancies vacancy = new Vacancies();
-            vacancy.Requirements = new List<Requirements>();
-
-            /////
-            Requirements requirement = new Requirements();
-            requirement.Skills = DatabaseController.DoSQL<Skills>("Select * From Skills").FirstOrDefault();
-            vacancy.Requirements.Add(requirement);
-            /////
-
-            return View(vacancy);
+            return View();
         }
 
         // POST: Vacancies/Create
