@@ -17,7 +17,7 @@
 }
 
 <br />
-@using (Html.BeginForm("UploadFileWithVacancies", "Vacancies", FormMethod.Post,
+@using (Html.BeginForm("UploadFileWithVacancies", "Manage", FormMethod.Post,
     new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
@@ -75,7 +75,7 @@
 
         <div class="form-group col-md-12">
 
-                @Html.Partial("_AddRequirementPartial", new WorkFlow.Models.DataBaseModels.DBContext())
+                @Html.Partial("_AddRequirementPartial", new WorkFlow.Models.DataBaseModels.Requirements())
             </div>
 
 

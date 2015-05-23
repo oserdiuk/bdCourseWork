@@ -417,7 +417,7 @@ namespace WorkFlow.Controllers
                     vacancy.FileName = "";
                     AddVacancy(vacancy);
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Vacancies");
             }
             catch
             {
@@ -455,12 +455,12 @@ namespace WorkFlow.Controllers
                     ParseFileToVacancy(path);
                 }
                 ViewBag.Message = "Upload successful";
-                return RedirectToAction("Create");
+                return RedirectToAction("Create", "Vacancies");
             }
             catch (Exception ex)
             {
                 ViewBag.Message = "Upload failed";
-                return RedirectToAction("Create");
+                return RedirectToAction("Create", "Vacancies");
             }
         }
 
@@ -525,6 +525,17 @@ namespace WorkFlow.Controllers
                             return;
                         }
                     }
+                    else if (infoFromFile[i].Contains("Skills:"))
+                    {
+                        try
+                        {
+                            GetSkillsFromFile(vacanciesText);
+                        }
+                        catch (Exception ex)
+                        {
+                            return;
+                        }
+                    }
                 }
 
                 vacancy.FileName = Guid.NewGuid().ToString();
@@ -536,6 +547,46 @@ namespace WorkFlow.Controllers
                     rtc.SaveDocument(Server.MapPath(pathToVacancies + "//" + vacancy.FileName + ".rtf"), DocumentFormat.Rtf);
                 }
 
+            }
+        }
+
+        private void GetSkillsFromFile(List<string> vacanciesText)
+        {
+            string findingCategory = @"lang1033\\langfe1033\\b\\i\\fs22\\cf3";
+            string findingSkills = @"lang1033\\langfe1033\\b\\i\\fs22\\cf3\\cell\\pard\\plain\\ql\\intbl\\yts8{\\lang1033\\langfe1033\\i\\fs22\\cf3 ";
+
+            foreach (var expr in vacanciesText)
+            {
+                Regex vacancyDividerExpression = new Regex(String.Format(@"{0}(.*?){0}", findingCategory));
+
+                List<string> infoFromFile = new List<string>();
+
+                Regex searchExpression = new Regex(String.Format(@"{0}[a-zA-Z0-9.,:;!№*( )?%""'//|\+-=@]*}", findingSkills));
+                MatchCollection matches = searchExpression.Matches(expr);
+                infoFromFile = matches.Cast<System.Text.RegularExpressions.Match>().Select(match => match.Value).ToList();
+
+                for (int i = 0; i < infoFromFile.Count() - 1; i++)
+                {
+                    var temp = infoFromFile[i + 1].Split(' ').ToList();
+                    temp.RemoveAt(0);
+
+                    if (infoFromFile[i].Contains("++ Windows") || infoFromFile[i].Contains("Objective-C") || infoFromFile[i].Contains(".NET Technologies") ||
+                        infoFromFile[i].Contains("Objective-C") || infoFromFile[i].Contains(".NET Technologies") || infoFromFile[i].Contains("C# ORM") ||
+                        infoFromFile[i].Contains("C# 3rd Party Libraries") || infoFromFile[i].Contains("Java JavaSE") || infoFromFile[i].Contains("Java Tools") ||infoFromFile[i].Contains("PHP Frameworks") || infoFromFile[i].Contains("Ruby Frameworks ") || 
+                        infoFromFile[i].Contains("Python Frameworks & Tools") || infoFromFile[i].Contains("JavaScript") ||
+                        infoFromFile[i].Contains("Graphic packages") || infoFromFile[i].Contains("Markup languages") || infoFromFile[i].Contains("Tools") ||
+                        infoFromFile[i].Contains("Web-servers") || infoFromFile[i].Contains("Networking Protocols") || infoFromFile[i].Contains("Databases") ||
+                        infoFromFile[i].Contains("Version control systems") || infoFromFile[i].Contains("Defect management systems") || 
+                        infoFromFile[i].Contains("Automated testing tools") || infoFromFile[i].Contains("Virtualization") || 
+                        infoFromFile[i].Contains("Analysis, design, project management") || infoFromFile[i].Contains("Personal characteristics") ||
+                        infoFromFile[i].Contains("Foreign languages"))
+                    {
+                        Regex searchSkillExpression = new Regex(String.Format(@"{0}[a-zA-Z0-9.,:;!№*( )?%""'/|\+-=@]*}", findingSkills));
+                        MatchCollection matchesSkill = searchSkillExpression.Matches(expr);
+                        infoFromFile = matchesSkill.Cast<System.Text.RegularExpressions.Match>().Select(match => match.Value).ToList();
+                    }
+
+                }
             }
         }
 
