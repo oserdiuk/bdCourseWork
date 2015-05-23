@@ -442,6 +442,13 @@ namespace WorkFlow.Controllers
         }
 
         [HttpPost]
+        public ActionResult AddNewRequirement()
+        {
+            Requirements requirement = new Requirements();
+            return PartialView("~/Views/Shared/EditorTemplates/Requirements.cshtml", requirement);
+        }
+
+        [HttpPost]
         public ActionResult UploadFileWithVacancies(HttpPostedFileBase file)
         {
             string path = "";

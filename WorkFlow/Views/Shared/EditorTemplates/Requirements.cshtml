@@ -1,0 +1,18 @@
+﻿@model WorkFlow.Models.DataBaseModels.Requirements
+
+@using Workflow.Helpers;
+
+@using(Html.BeginCollectionItem("requirements")) {
+<tr>
+    <td>
+        nothing
+        @*@Html.EditorFor( m => requirement.Skills)*@
+    </td>
+    <td>
+        @Html.EditorFor(m => m.MinValue)
+    </td>
+    <td>
+        @Html.EditorFor(m => m.MaxValue)
+    </td>
+</tr>
+}

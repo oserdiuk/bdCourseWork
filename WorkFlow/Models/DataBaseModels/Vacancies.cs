@@ -7,12 +7,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
 using System.Data.Entity.Spatial;
 
-    public partial class Vacancies
+    public class Vacancies
     {
-        public Vacancies()
-        {
-            Requirements = new HashSet<Requirements>();
-        }
+        //public Vacancies()
+        //{
+        //    Requirements = new HashSet<Requirements>();
+        //}
 
         public int Id { get; set; }
 
@@ -39,6 +39,6 @@ using System.Data.Entity.Spatial;
 
         public virtual Companies Companies { get; set; }
 
-        public virtual ICollection<Requirements> Requirements { get; set; }
+        public virtual List<Requirements> Requirements { get; set; }
     }
 }
