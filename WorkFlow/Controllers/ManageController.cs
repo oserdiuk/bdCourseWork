@@ -444,7 +444,7 @@ namespace WorkFlow.Controllers
         [HttpPost]
         public ActionResult AddNewRequirement()
         {
-            Requirements requirement = new Requirements();
+            Requirements requirement = new Requirements();//test
             return PartialView("~/Views/Shared/EditorTemplates/Requirements.cshtml", requirement);
         }
 
