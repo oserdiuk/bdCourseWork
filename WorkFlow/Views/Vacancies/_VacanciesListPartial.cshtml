@@ -1,9 +1,12 @@
 ﻿@model WorkFlow.Models.DataBaseModels.DBContext
+@using Microsoft.AspNet.Identity
 
 @{
     ViewBag.Title = "_VacanciesListPartial";
-}
 
+    int id = WorkFlow.Controllers.DatabaseController.DoSQL<WorkFlow.Models.DataBaseModels.Companies>(String.Format("Select * From Companies Where Email = '{0}'", User.Identity.GetUserName())).LastOrDefault().Id;
+
+}
 
 <style type="text/css">
     changeCursor:hover {
@@ -37,10 +40,18 @@
                         }
                     </td>
                 }
+                if (@id == Convert.ToInt32(@row.ItemArray[1]))
+                {
+                    <td>
+                        @Ajax.ActionLink("Edit", "EditVacancyInfo", "Vacancies", new { id = Convert.ToInt32(row.ItemArray[0]) }, new AjaxOptions { HttpMethod = "POST" })
+                    </td>
+                    <td>
+                        @Ajax.ActionLink("Delete", "DeleteVacancy", "Vacancies", new { id = Convert.ToInt32(row.ItemArray[0]) }, new AjaxOptions { HttpMethod = "POST" })
+                    </td>
+                }
                     }
                 </tr>
             }
         }
     </tbody>
 </table>
-

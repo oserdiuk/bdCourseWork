@@ -4,26 +4,38 @@
 
 @using (Html.BeginCollectionItem("requirements"))
 {
-    <div class="deleteRow">
-        <div class="col-md-3">
-            @*@Html.EditorFor( m => requirement.Skills)*@
+    <div class="editorRow">
+        <div class="col-md-5">
+            @{List<SelectListItem> items = new List<SelectListItem>();
+              List<WorkFlow.Models.DataBaseModels.Skills> list = WorkFlow.Controllers.DatabaseController.DoSQL<WorkFlow.Models.DataBaseModels.Skills>("Select * From Skills");
+              foreach (var v in list)
+            {
+                items.Add(new SelectListItem { Text = v.Name + v.UnitMeasure, Value = v.Name });
+            } }
+            @Html.DropDownListFor(m => m.Skills.Name, items)
         </div>
-        <div class ="col-md-3">
+        <div class ="col-md-2">
             @Html.EditorFor(m => m.MinValue)
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2 col-md-offset-1">
             @Html.EditorFor(m => m.MaxValue)
         </div>
-    </div>
+        <div>
+            <button class="deleteRow">delete</button>
+            </div>
+        <br />
+        <br />
+        </div>
 }
 
-<br />
-<br />
+
 
 <script>
-    $("div.deleteRow").live("click", function () {
-        // $(this).parents("div.editorRow:first").remove();
-        alert($(this));
-        return false;
+    $(function () {
+        $("button.deleteRow").on("click", function () {
+            $(this).parents("div.editorRow:first").remove();
+            return false;
+        });
     });
+    
 </script>

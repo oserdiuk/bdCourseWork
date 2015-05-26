@@ -23,7 +23,7 @@ namespace WorkFlow.Models.DataBaseModels
 
         public DBContext(string queryToGetVacancies):this()
         {
-            this.Vacancies = DatabaseController.DoSQL<Vacancies>(queryToGetVacancies);
+            this.DBDataTable = DatabaseController.GetDataTable(queryToGetVacancies);
         }
 
         public virtual List<Categories> Categories { get; set; }

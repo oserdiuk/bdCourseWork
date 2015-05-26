@@ -5,7 +5,9 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@section scripts{
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+}
 <h2>Index</h2>
 
 <div style="background-color:#5C8D94" class="navbar-collapse collapse navbar-responsive-collapse">

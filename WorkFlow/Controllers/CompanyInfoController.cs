@@ -73,7 +73,8 @@ namespace WorkFlow.Controllers
 
         public ActionResult VacancyInfo(int id)
         {
-            return View(DatabaseController.GetVacancyById(id));
+            var v = DatabaseController.GetVacancyById(id);
+            return View(v);
         }
     }
 }

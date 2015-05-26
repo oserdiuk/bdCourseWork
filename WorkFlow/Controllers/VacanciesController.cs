@@ -67,10 +67,18 @@ namespace WorkFlow.Controllers
         //}
 
         // GET: Vacancies/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult EditVacancyInfo(int id)
         {
-            ViewBag.Skills = DatabaseController.DoSQL<Skills>("Select * From Skills;");
-            return View();
+            Vacancies vacancy = DatabaseController.DoSQL<Vacancies>("Select * From Vacancies Where Id = " + id).LastOrDefault();
+            return View("~/Views/Vacancies/EditVacancyInfo.cshtml", vacancy);
+        }
+
+        public ActionResult DeleteVacancy(int id)
+        {
+            DatabaseController.DoSQL<Vacancies>(@"delete from (select V.Id from Vacancies V join Requirements R
+on (R.CompanyId = C.Id)) x where x.Id = " + id).LastOrDefault();
+            
+            return View("Index", "Home");
         }
 
         // POST: Vacancies/Edit/5
@@ -124,6 +132,56 @@ namespace WorkFlow.Controllers
             return File(pathToVacancies + fileName, "application/msword", fileName);
         }
 
-      
+        //public FileResult Download(int id)
+        //{
+        //    Vacancies vacancy= DatabaseController.GetVacancyById(id);
+        //    string fileName = Server.MapPath(@"~/App_Data/VacancyReport.rtf");
+        //    string fileNameToDownload = Server.MapPath(@"~/App_Data/CompanyReportToDownload.rtf");
+        //    if (System.IO.File.Exists(fileNameToDownload))
+        //    {
+        //        System.IO.File.Delete(fileNameToDownload);
+        //    }
+        //    System.IO.File.Copy(fileName, fileNameToDownload);
+        //    InsertInfo(fileNameToDownload, company);
+        //    return File(fileNameToDownload, "application/msword", company.Name + ".rtf");
+        //}
+
+        //public void InsertInfo(string source, Companies company)
+        //{
+        //    var fileContents = System.IO.File.ReadAllText(source);
+        //    using (RichEditControl richEditControl = new RichEditControl())
+        //    {
+        //        richEditControl.LoadDocument(source, DocumentFormat.Rtf);
+        //        string v = richEditControl.RtfText;
+        //        v = v.Replace("address", String.Format("{0}, {1}", company.Address, company.City));
+        //        v = v.Replace("name", company.Name);
+        //        v = v.Replace("site", company.Website);
+        //        v = v.Replace("email", company.Email);
+        //        v = v.Replace("year", company.CreatingDate.Year.ToString());
+
+        //        int index = v.IndexOf(lastString);
+        //        List<Vacancies> vacancies = DatabaseController.DoSQL<Vacancies>(String.Format("Select Distinct V.* From Vacancies V, Companies C Where V.CompanyId = {0}", company.Id));
+
+        //        if (vacancies.Count() != 0)
+        //        {
+        //            string temp = @"{\lang1033\langfe1033\b\i\fs28\cf2 Attention! }{\lang1033\langfe1033\fs28\cf3 We have next vacancies available:}";
+        //            v = v.Insert(index, temp);
+        //            index += temp.Length;
+        //        }
+        //        foreach (var vac in vacancies)
+        //        {
+        //            string temp = vacancyTemplate;
+        //            temp = temp.Replace("vacName", vac.Name);
+        //            temp = temp.Replace("description", vac.Description);
+        //            temp = temp.Replace("amount", vac.Amount.ToString());
+        //            temp = temp.Replace("date", String.Format("{0}/{1}/{2}", vac.OpenDate.Day, vac.OpenDate.Month, vac.OpenDate.Year));
+        //            v = v.Insert(index, temp);
+        //            index += temp.Length;
+        //        }
+
+        //        richEditControl.RtfText = v;
+        //        richEditControl.SaveDocument(source, DocumentFormat.Rtf);
+        //    }
+        //}
     }
 }

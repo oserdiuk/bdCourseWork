@@ -125,15 +125,24 @@ namespace WorkFlow.Controllers
                     //}
                     context = new DBContext();
                     string sortOrder = actionNumber == ActionWithTable.SortDesc ? "DESC" : "ASC";
-                    context.DBDataTable = GetDataTable(String.Format("SELECT Id, Name, City, Email, Address, Phone, Website, PropertyForm, CreatingDate FROM {0} ORDER BY {1} {2}", tableName, fieldToSort, sortOrder));
-                    ViewBag.FilterCompanySucceed = true;
-                    break;
+                    if (tableName == "Companies")
+                    {
+                        context.DBDataTable = GetDataTable(String.Format("SELECT Id, Name, City, Email, Address, Phone, Website, PropertyForm, CreatingDate FROM {0} ORDER BY {1} {2}", tableName, fieldToSort, sortOrder));
+                        ViewBag.FilterCompanySucceed = true;
+                        return PartialView("~/Views/Companies/_CompaniesListPartial.cshtml", context);
+                    }
+                    else
+                    {
+                        context.DBDataTable = GetDataTable(String.Format("SELECT Id, CompanyId, Name, OpenDate as 'Open date', Amount FROM {0} ORDER BY {1} {2}", tableName, fieldToSort, sortOrder));
+                        return PartialView("~/Views/Vacancies/_VacanciesListPartial.cshtml", context);
+                    }
                 default: break;
             }
             //context = new DBContext();
             //context.Companies = updatedCompanies;
             //context.Vacancies = updatedVacancies;
             return PartialView("~/Views/Companies/_CompaniesListPartial.cshtml", context);
+
         }
 
         public List<T> Sort<T>(string tableName, string field, bool descSort, bool isCompany)
@@ -209,6 +218,73 @@ namespace WorkFlow.Controllers
             return PartialView("~/Views/Companies/_CompaniesListPartial.cshtml", context);
         }
 
+        public PartialViewResult FilterVacancy(VacancyFilter model)
+        {
 
+            string query = "";
+            DBContext context = new DBContext();
+
+//            SELECT Distinct V.Id, V.CompanyId, V.Name
+//, X.Name, V.OpenDate FROM Vacancies V
+//LEFT OUTER JOIN (Select * From Skills S, Requirements R Where S.Id = R.SkillId) X ON V.Id = X.VacancyId 
+//Group By V.Id, V.CompanyId, V.Name, X.Name Having X.Name IN ('Emotional stability', 'RUP', 'Self-control') And V.OpenDate > '20.01.2015' And V.OpenDate <'20.05.2015' 
+//;
+
+
+            //if (model.OpenDate == null && model.RequiredSkills == null)
+            //{
+            //    query = "Select Id, CompanyId, Name, OpenDate as 'Open date', Amount FROM Vacancies;";
+            //}
+
+            //else
+            //{
+            //    string cities = "C.City in (";
+            //    string and = "";
+            //    string where = "";
+            //    string having = "";
+            //    string initializeColumn = "";
+            //    string checkForId = "";
+
+            //    if (model.NumberOfVacancyMax != null || model.NumberOfVacancyMin != null)
+            //    {
+            //        having = "Having";
+            //        and = model.NumberOfVacancyMax != null && model.NumberOfVacancyMin != null ? "And" : "";
+            //        initializeColumn = @", Count(V.CompanyId) as 'Number of vacancies'";
+            //        checkForId = @", Vacancies V Where C.Id = V.CompanyId";
+            //        where = "And ";
+            //    }
+            //    else
+            //    {
+            //        where = " Where ";
+            //    }
+            //    if (model.City != null)
+            //    {
+            //        if (model.City.Count() == 1)
+            //        {
+            //            cities = "C.City = N'" + model.City[0] + "'";
+            //        }
+            //        else
+            //        {
+            //            foreach (var c in model.City)
+            //            {
+            //                cities += model.City.Count() != (model.City.IndexOf(c) + 1) ? "N'" + c + "'" + ", " : "N'" + c + "')";
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        cities = "";
+            //    }
+
+            //    string vacNumberForQueryMin = model.NumberOfVacancyMin != null ? " Count(V.CompanyId) >= " + model.NumberOfVacancyMin : "";
+            //    string vacNumberForQueryMax = model.NumberOfVacancyMax != null ? " Count(V.CompanyId) <= " + model.NumberOfVacancyMax : "";
+
+            //    query = String.Format(@"Select C.Id, C.Name, C.Website, C.City, C.Address, C.Email{0} From Companies C{1} {2} {3} Group by C.Id, C.Name, C.Website, C.City, C.Address, C.Email {4} {5} {6} {7};", initializeColumn, checkForId, where, cities, having, vacNumberForQueryMin, and, vacNumberForQueryMax);
+            //}
+
+            //context.DBDataTable = GetDataTable(query);
+            //ViewBag.FilterCompanySucceed = true;
+            return PartialView("~/Views/Companies/_CompaniesListPartial.cshtml", context);
+        }
     }
 }

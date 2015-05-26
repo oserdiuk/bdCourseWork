@@ -473,6 +473,7 @@
     <Content Include="Views\Vacancies\_VacanciesFilterFormPartial.cshtml" />
     <Content Include="Views\Vacancies\_RequirementsListPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Requirements.cshtml" />
+    <Content Include="Views\Vacancies\EditVacancyInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

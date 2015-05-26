@@ -410,6 +410,11 @@ namespace WorkFlow.Controllers
         [HttpPost]
         public ActionResult CreateVacancy(Vacancies vacancy)
         {
+            foreach (var r in vacancy.Requirements)
+            {
+                r.SkillId = DatabaseController.DoSQL<Skills>(String.Format("Select * From Skills Where Name = '{0}'", r.Skills.Name)).LastOrDefault().Id;
+            }
+
             try
             {
                 if (ModelState.IsValid)
@@ -417,6 +422,8 @@ namespace WorkFlow.Controllers
                     vacancy.FileName = "";
                     AddVacancy(vacancy);
                 }
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+
                 return RedirectToAction("Index", "Vacancies");
             }
             catch
@@ -425,6 +432,15 @@ namespace WorkFlow.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult MyVacancies()
+        {
+            DBContext context = new DBContext();
+            context.Vacancies = DatabaseController.DoSQL<Vacancies>(String.Format("Select * From Vacancies Where CompanyId = {0}",  GetAuthenticatedCompany().Id));
+            return View("~/Views/Vacancies/Index.cshtml", context);
+        }
+
+        
         [HttpPost]
         public PartialViewResult CreateRequirement(Requirements requirement)
         {
@@ -439,6 +455,12 @@ namespace WorkFlow.Controllers
         public void AddVacancy(Vacancies vacancy)
         {
             DatabaseController.DoSQL<Vacancies>(String.Format("INSERT INTO Vacancies (Name, OpenDate, Amount, Description, FileName, CompanyId) values (N'{0}', N'{1}', N'{2}', N'{3}', N'{4}', N'{5}')", vacancy.Name, vacancy.OpenDate, vacancy.Amount, vacancy.Description, vacancy.FileName, GetAuthenticatedCompany().Id));
+            int id = DatabaseController.DoSQL<Vacancies>(@"select Id from Vacancies where Id = (select max(Id) from Vacancies)").LastOrDefault().Id;
+            
+            foreach (var r in vacancy.Requirements)
+            {
+                DatabaseController.DoSQL<Requirements>(String.Format(@"Insert Into Requirements (VacancyId, SkillId, MinValue, MaxValue) Values ({0}, {1}, '{2}', '{3}')", id, r.SkillId, r.MaxValue, r.MinValue));
+            }
         }
 
         [HttpPost]
@@ -446,6 +468,50 @@ namespace WorkFlow.Controllers
         {
             Requirements requirement = new Requirements();
             return PartialView("~/Views/Shared/EditorTemplates/Requirements.cshtml", requirement);
+        }
+
+        [HttpPost]
+        public ActionResult EditVacancy(Vacancies vacancy)
+        {
+            if (vacancy.Requirements != null)
+            {
+                foreach (var r in vacancy.Requirements)
+                {
+                    r.SkillId = DatabaseController.DoSQL<Skills>(String.Format("Select * From Skills Where Name = '{0}'", r.Skills.Name)).LastOrDefault().Id;
+                }
+            }
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    vacancy.FileName = "";
+                    DatabaseController.DoSQL<Vacancies>(String.Format("Update Vacancies Set Name = N'{0}', OpenDate = N'{1}', Amount = {2}, Description = '{3}', FileName = '{4}', CompanyId = {5} Where Id = {6}", vacancy.Name, vacancy.OpenDate, vacancy.Amount, vacancy.Description, vacancy.FileName, GetAuthenticatedCompany().Id, vacancy.Id));
+                    List<Requirements> requirements = DatabaseController.DoSQL<Requirements>("Select * From Requirements Where VacancyId = " + vacancy.Id);
+                    if (vacancy.Requirements != null)
+                    {
+                        foreach (var r in vacancy.Requirements)
+                        {
+                            if (requirements.Select(m => m.SkillId == r.SkillId).Count() > 0)
+                            {
+                                DatabaseController.DoSQL<Requirements>(String.Format(@"Delete from Requirements Where SkillId = {0} And VacancyId = {1}", r.SkillId, r.VacancyId));
+                            }
+                            DatabaseController.DoSQL<Requirements>(String.Format(@"Insert Into Requirements (VacancyId, SkillId, MinValue, MaxValue) Values ({0}, {1}, '{2}', '{3}')", vacancy.Id, r.SkillId, r.MaxValue, r.MinValue));
+                        }
+                    }
+                    else
+                    {
+                        DatabaseController.DoSQL<Requirements>(String.Format(@"Delete from Requirements Where VacancyId = {0}", vacancy.Id));
+                    }
+                }
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+
+                return RedirectToAction("VacancyInfo", "CompanyInfo", new { id = vacancy.Id });
+            }
+            catch
+            {
+                return RedirectToAction("EditVacancyInfo", "Vacancies", vacancy);
+            }
         }
 
         [HttpPost]

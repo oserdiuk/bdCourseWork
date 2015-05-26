@@ -17,7 +17,10 @@ namespace WorkFlow.Models
 
     public class VacancyFilter
     {
-        public DateTime OpenDate { get; set; }
+        [DataType(DataType.Date, ErrorMessage = "Wrong date")]
+        public DateTime MinOpenDate { get; set; }
+        [DataType(DataType.Date, ErrorMessage = "Wrong date")]
+        public DateTime MaxOpenDate { get; set; }
         public List<Skills> RequiredSkills { get; set; }
 
         public VacancyFilter()

@@ -6,22 +6,24 @@
         @using (Ajax.BeginForm("FilterVacancy", "Database", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace }))
         {
             @Html.AntiForgeryToken()
-            @*<div class="form-group">
-                <label for="textArea" class="col-lg-2 control-label" style="width: auto; text-align:center">Кол-во вакансий</label>
-                @Html.EditorFor(m => m.NumberOfVacancyMin, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.EditorFor(m => m.NumberOfVacancyMax, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="form-group">
+                <label for="textArea" class="col-lg-2 control-label" style="width: auto; text-align:center">Min open date</label>
+                @Html.EditorFor(model => model.MinOpenDate, new { htmlAttributes = new { @class = "form-control" } })
+            </div>        <div class="form-group">
+                <label for="textArea" class="col-lg-2 control-label" style="width: auto; text-align:center">Max open date</label>
+                @Html.EditorFor(model => model.MaxOpenDate, new { htmlAttributes = new { @class = "form-control" } })
             </div>
             <div class="form-group">
-                <label class="col-lg-2 control-label" style="width: auto; text-align:center">Города</label>
+                <label class="col-lg-2 control-label" style="width: auto; text-align:center">Skills</label>
 
                 @{List<SelectListItem> items = new List<SelectListItem>();
-                foreach (var v in ViewBag.Cities)
+                foreach (var v in ViewBag.Skills)
                 {
-                    items.Add(new SelectListItem { Text = v, Value = v });
+                    items.Add(new SelectListItem { Text = v.Name, Value = v.Name });
                 } }
 
-                @Html.ListBoxFor(m => m.City, items, new { @class = "form-control" })
-            </div>*@
+                @Html.ListBoxFor(m => m.RequiredSkills, items, new { @class = "form-control" })
+            </div>
             <div class="form-group">
                 <div class="col-lg-10 col-lg-offset-2">
                     <input type="submit" id="submitButton" class="btn btn-primary" value="UpdateTable" />

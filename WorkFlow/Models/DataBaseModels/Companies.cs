@@ -34,7 +34,6 @@ namespace WorkFlow.Models.DataBaseModels
         [Display(Name = "Город*")]
         public string City { get; set; }
 
-        [Required(ErrorMessage = "Необходимо ввести E-mail, который будет отображатся в информации о Ваших вакансиях.")]
         [Display(Name = "E-mail (контакты)*")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }

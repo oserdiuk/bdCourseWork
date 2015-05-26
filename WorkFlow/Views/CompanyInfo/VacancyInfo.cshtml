@@ -1,8 +1,10 @@
 ﻿@model WorkFlow.Models.DataBaseModels.Vacancies
 
 @{
-    ViewBag.Title = Model.Name + "WorkFlow";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = Model.Name + " WorkFlow";
+    List<WorkFlow.Models.DataBaseModels.Requirements> list = WorkFlow.Controllers.DatabaseController.DoSQL<WorkFlow.Models.DataBaseModels.Requirements>("Select * From Requirements Where VacancyId = " + Model.Id);
+
 }
 
 <div class=" col-md-12">
@@ -58,13 +60,59 @@
                 </dd>
 
                 <dt>
-                    @Html.DisplayFor(model => model.Description)
+                    @Html.DisplayNameFor(model => model.Description)
                 </dt>
                 <dd>
                     @Html.DisplayFor(model => model.Description)
                 </dd>
-              
+
             </dl>
+            <br />
+            <h4><b>Requirements:</b></h4>
+            <br />
+            @if (list.Count() == 0)
+            { <h5>No requirements.</h5> }
+            else
+            { <div class="col-md-12">
+                <div class="col-md-12">
+                    <div class="col-md-5 ">
+                        <b>Skill</b>
+                    </div>
+                    <div class="col-md-1">
+                        <b>Min</b>
+                    </div>
+                    <div class="col-md-1">
+                        <b>Max</b>
+                    </div>
+                    <div class="col-md-5">
+                        <b>Range</b>
+                    </div>
+                </div>
+                @{foreach (var r in list)
+                {
+                    <div class="col-md-12">
+                        <div class="col-md-5">
+                            @{
+                    WorkFlow.Models.DataBaseModels.Skills s = WorkFlow.Controllers.DatabaseController.DoSQL<WorkFlow.Models.DataBaseModels.Skills>(@"Select * From Skills Where Id = " + r.SkillId).LastOrDefault();
+                            }
+                            @s.Name
+                        </div>
+                        <div class="col-md-1">
+                            @r.MinValue
+                        </div>
+                        <div class="col-md-1">
+                            @r.MaxValue
+                        </div>
+                        <div class="col-md-5">
+                            @s.UnitMeasure
+                        </div>
+                    </div>
+                }
+                }
+
+
+            </div>
+            }
         </div>
         <div class=" col-md-1">
             <br />

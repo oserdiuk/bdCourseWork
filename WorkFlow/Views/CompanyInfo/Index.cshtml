@@ -3,7 +3,10 @@
 @{
     ViewBag.Title = Model.Name + "WorkFlow";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    if (ViewBag.CurId != Model.Id){ ViewBag.CurId = false;}
 }
+
 
 <div class=" col-md-12">
     <div class="col-md-offset-1">
@@ -78,6 +81,7 @@
                     @Html.DisplayFor(model => model.CreatingDate.Year)
                 </dd>
 
+
             </dl>
         </div>
         <div class=" col-md-1">
@@ -89,8 +93,9 @@
         </div>
     </div>
 
+
     <div>
-        @Html.Partial("~/Views/Vacancies/_VacanciesListPartial.cshtml", new WorkFlow.Models.DataBaseModels.DBContext("Select Distinct V.* From Companies C, Vacancies V Where V.CompanyId = " + Model.Id))
+        @Html.Partial("~/Views/Vacancies/_VacanciesListPartial.cshtml", new WorkFlow.Models.DataBaseModels.DBContext("Select Distinct V.Id, V.CompanyId, V.Name, V.OpenDate as 'Open date', V.Amount From Companies C, Vacancies V Where V.CompanyId = " + Model.Id))
     </div>
 
 </div>
