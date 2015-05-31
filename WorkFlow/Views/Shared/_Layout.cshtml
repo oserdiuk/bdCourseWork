@@ -24,23 +24,14 @@
         <div style="background-color:#2a4649" class="navbar-collapse collapse navbar-responsive-collapse">
             <ul class="nav navbar-nav">
                 <li class="active">@Html.ActionLink("Home", "Index", "Home")</li>
-                <li class="active">@Html.ActionLink("Компании", "Index", "Companies")</li>
+                <li class="active">@Html.ActionLink("Companies", "Index", "Companies")</li>
                 <li class="active">@Html.ActionLink("Vacancy", "Index", "Vacancies")</li>
                 <li class="active">@Html.ActionLink("Query editor", "Index", "QueryEditor")</li>
-                <li class="active">@Html.ActionLink("Search", "Index", "Search")</li>
 
             </ul>
             @Html.Partial("_LoginPartial", new WorkFlow.Models.LoginViewModel())
 
         </div>
-        @*<div class="mainmenu">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Vacancy", "Index", "Vacancy")</li>
-                </ul>
-            </div>*@
 
         <div class="container body-content">
             @RenderBody()
@@ -50,29 +41,5 @@
             </footer>
         </div>
     </div>
-    @*<div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        <li>@Html.ActionLink("Vacancy", "Index", "Vacancy")</li>
-                    </ul>
-                    @Html.Partial("_LoginPartial")
-                </div>
-            </div>
-        </div>*@
-
-
-
 </body>
 </html>

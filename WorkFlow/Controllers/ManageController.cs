@@ -436,11 +436,11 @@ namespace WorkFlow.Controllers
         public ActionResult MyVacancies()
         {
             DBContext context = new DBContext();
-            context.Vacancies = DatabaseController.DoSQL<Vacancies>(String.Format("Select * From Vacancies Where CompanyId = {0}",  GetAuthenticatedCompany().Id));
+            context.Vacancies = DatabaseController.DoSQL<Vacancies>(String.Format("Select * From Vacancies Where CompanyId = {0}", GetAuthenticatedCompany().Id));
             return View("~/Views/Vacancies/Index.cshtml", context);
         }
 
-        
+
         [HttpPost]
         public PartialViewResult CreateRequirement(Requirements requirement)
         {
@@ -456,7 +456,7 @@ namespace WorkFlow.Controllers
         {
             DatabaseController.DoSQL<Vacancies>(String.Format("INSERT INTO Vacancies (Name, OpenDate, Amount, Description, FileName, CompanyId) values (N'{0}', N'{1}', N'{2}', N'{3}', N'{4}', N'{5}')", vacancy.Name, vacancy.OpenDate, vacancy.Amount, vacancy.Description, vacancy.FileName, GetAuthenticatedCompany().Id));
             int id = DatabaseController.DoSQL<Vacancies>(@"select Id from Vacancies where Id = (select max(Id) from Vacancies)").LastOrDefault().Id;
-            
+
             foreach (var r in vacancy.Requirements)
             {
                 DatabaseController.DoSQL<Requirements>(String.Format(@"Insert Into Requirements (VacancyId, SkillId, MinValue, MaxValue) Values ({0}, {1}, '{2}', '{3}')", id, r.SkillId, r.MaxValue, r.MinValue));
@@ -492,11 +492,31 @@ namespace WorkFlow.Controllers
                     {
                         foreach (var r in vacancy.Requirements)
                         {
-                            if (requirements.Select(m => m.SkillId == r.SkillId).Count() > 0)
+                            bool needToDelete = true; //= requirements.Any(newReq => newReq.SkillId == oldRequirement.SkillId);
+                            //foreach (var oldReq in requirements)
+                            //{
+                            //    if (r.SkillId == oldReq.SkillId)
+                            //    {
+                            //        needToDelete = false;
+                            //        break;
+                            //    }
+                            //}
+
+                            if (needToDelete)
                             {
-                                DatabaseController.DoSQL<Requirements>(String.Format(@"Delete from Requirements Where SkillId = {0} And VacancyId = {1}", r.SkillId, r.VacancyId));
+                                DatabaseController.DoSQL<Requirements>(String.Format(@"Delete from Requirements Where SkillId = {0}", r.SkillId));
+                                continue;
                             }
-                            DatabaseController.DoSQL<Requirements>(String.Format(@"Insert Into Requirements (VacancyId, SkillId, MinValue, MaxValue) Values ({0}, {1}, '{2}', '{3}')", vacancy.Id, r.SkillId, r.MaxValue, r.MinValue));
+
+                            var oldRequirement = requirements.FirstOrDefault(m => m.SkillId == r.SkillId);
+                            if (oldRequirement != null)
+                            {
+                                DatabaseController.DoSQL<Requirements>(String.Format(@"Update Requirements Set VacancyId = {0}, SkillId = {1}, MinValue = N'{2}', MaxValue = N'{3}' Where SkillId = {1} And VacancyId = {0}", vacancy.Id, r.SkillId, r.MinValue, r.MaxValue));
+                            }
+                            else
+                            {
+                                DatabaseController.DoSQL<Requirements>(String.Format(@"Insert Into Requirements (VacancyId, SkillId, MinValue, MaxValue) Values ({0}, {1}, '{2}', '{3}')", vacancy.Id, r.SkillId, r.MinValue, r.MaxValue));
+                            }
                         }
                     }
                     else
@@ -627,6 +647,9 @@ namespace WorkFlow.Controllers
         {
             string findingCategory = @"lang1033\\langfe1033\\b\\i\\fs22\\cf3";
             string findingSkills = @"lang1033\\langfe1033\\b\\i\\fs22\\cf3\\cell\\pard\\plain\\ql\\intbl\\yts8{\\lang1033\\langfe1033\\i\\fs22\\cf3 ";
+            List<Requirements> requirements = new List<Requirements>();
+            Requirements tempReqirement;
+
 
             foreach (var expr in vacanciesText)
             {
@@ -634,23 +657,37 @@ namespace WorkFlow.Controllers
 
                 List<string> infoFromFile = new List<string>();
 
-                Regex searchExpression = new Regex(String.Format(@"{0}[a-zA-Z0-9.,:;!№*( )?%""'//|\+-=@]*}", findingSkills));
+                Regex searchExpression = new Regex(findingSkills + @"[a-zA-Z0-9.,:;!№*( )?%""'//|\+-=@]*}");
                 MatchCollection matches = searchExpression.Matches(expr);
                 infoFromFile = matches.Cast<System.Text.RegularExpressions.Match>().Select(match => match.Value).ToList();
 
                 for (int i = 0; i < infoFromFile.Count() - 1; i++)
                 {
-                    var temp = infoFromFile[i + 1].Split(' ').ToList();
-                    temp.RemoveAt(0);
+                    infoFromFile[i] = infoFromFile[i].Replace(@"lang1033\langfe1033\b\i\fs22\cf3\cell\pard\plain\ql\intbl\yts8{\lang1033\langfe1033\i\fs22\cf3 ", "");
+                    var skills = infoFromFile[i].Split(',').ToList();
+                    for (int j = 0; j < skills.Count() - 1; j++)
+                    {
+                        var nameAndPoints = skills[i].Split(',').ToList();
+                        var skill = DatabaseController.DoSQL<Skills>("Select * From Skills Where Name = " + nameAndPoints[0]);
+                        
+                        if (skill.Count() == 0)
+                        {
+                            continue;
+                        }
+
+                        DatabaseController.DoSQL<Skills>("Select * From Skills Where Name = " + nameAndPoints[0]);
+                            skills[i].Split(',').ToList();
+                    }
+
 
                     if (infoFromFile[i].Contains("++ Windows") || infoFromFile[i].Contains("Objective-C") || infoFromFile[i].Contains(".NET Technologies") ||
                         infoFromFile[i].Contains("Objective-C") || infoFromFile[i].Contains(".NET Technologies") || infoFromFile[i].Contains("C# ORM") ||
-                        infoFromFile[i].Contains("C# 3rd Party Libraries") || infoFromFile[i].Contains("Java JavaSE") || infoFromFile[i].Contains("Java Tools") ||infoFromFile[i].Contains("PHP Frameworks") || infoFromFile[i].Contains("Ruby Frameworks ") || 
+                        infoFromFile[i].Contains("C# 3rd Party Libraries") || infoFromFile[i].Contains("Java JavaSE") || infoFromFile[i].Contains("Java Tools") || infoFromFile[i].Contains("PHP Frameworks") || infoFromFile[i].Contains("Ruby Frameworks ") ||
                         infoFromFile[i].Contains("Python Frameworks & Tools") || infoFromFile[i].Contains("JavaScript") ||
                         infoFromFile[i].Contains("Graphic packages") || infoFromFile[i].Contains("Markup languages") || infoFromFile[i].Contains("Tools") ||
                         infoFromFile[i].Contains("Web-servers") || infoFromFile[i].Contains("Networking Protocols") || infoFromFile[i].Contains("Databases") ||
-                        infoFromFile[i].Contains("Version control systems") || infoFromFile[i].Contains("Defect management systems") || 
-                        infoFromFile[i].Contains("Automated testing tools") || infoFromFile[i].Contains("Virtualization") || 
+                        infoFromFile[i].Contains("Version control systems") || infoFromFile[i].Contains("Defect management systems") ||
+                        infoFromFile[i].Contains("Automated testing tools") || infoFromFile[i].Contains("Virtualization") ||
                         infoFromFile[i].Contains("Analysis, design, project management") || infoFromFile[i].Contains("Personal characteristics") ||
                         infoFromFile[i].Contains("Foreign languages"))
                     {

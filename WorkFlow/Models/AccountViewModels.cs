@@ -73,11 +73,11 @@ namespace WorkFlow.Models
         [Required]
         [StringLength(100, ErrorMessage = "Длина пароля должна быть не меньше {2} символов.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Ваш пароль*")]
+        [Display(Name = "Password*")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Подтвердите пароль*")]
+        [Display(Name = "Confirm password*")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }

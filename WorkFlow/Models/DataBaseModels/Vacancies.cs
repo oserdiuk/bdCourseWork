@@ -19,17 +19,17 @@ using System.Data.Entity.Spatial;
         public int CompanyId { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
-        [Display(Name = "Название вакансии*")]
+        [Display(Name = "Vacancy name*")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Date is required")]
         [DataType(DataType.Date, ErrorMessage = "Wrong date")]
-        [Display(Name = "Дата открытия вакансии*")]
+        [Display(Name = "Vacancy opening date*")]
         public DateTime OpenDate { get; set; }
 
         [Range(0, 250, ErrorMessage = "Please enter a number between 0 .")]
         [DataAnnotationsExtensions.Integer(ErrorMessage = "Please enter a valid number.")]
-        [Display(Name = "Количество мест")]
+        [Display(Name = "Amount of free positions")]
         public int? Amount { get; set; }
 
         [Display(Name = "Description")]

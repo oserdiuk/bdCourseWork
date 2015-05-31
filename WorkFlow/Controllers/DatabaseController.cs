@@ -24,7 +24,7 @@ namespace WorkFlow.Controllers
 
     public enum Statistics
     {
-        CompanyInCities, SkillSForVacancy, VacanciesInRegion
+        CompanyInCities, SkillsForVacancy, VacanciesInRegion
     }
     #endregion
 
@@ -223,68 +223,64 @@ namespace WorkFlow.Controllers
 
             string query = "";
             DBContext context = new DBContext();
+            DateTime dateDefault = new DateTime(0001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            if (model.MaxOpenDate == dateDefault & model.MinOpenDate == dateDefault & model.RequiredSkills.Count() == 0)
+            {
+                query = @"SELECT Distinct V.Id, V.CompanyId, V.Name, V.OpenDate FROM Vacancies V ";
+            }
+            else
+            {
+                string skills = "X.Name IN (";
 
-//            SELECT Distinct V.Id, V.CompanyId, V.Name
-//, X.Name, V.OpenDate FROM Vacancies V
-//LEFT OUTER JOIN (Select * From Skills S, Requirements R Where S.Id = R.SkillId) X ON V.Id = X.VacancyId 
-//Group By V.Id, V.CompanyId, V.Name, X.Name Having X.Name IN ('Emotional stability', 'RUP', 'Self-control') And V.OpenDate > '20.01.2015' And V.OpenDate <'20.05.2015' 
-//;
+                if (model.RequiredSkills.Count() != 0)
+                {
+                    if (model.RequiredSkills.Count() == 1)
+                    {
+                        skills = "X.Name = N'" + model.RequiredSkills[0] + "'";
+                    }
+                    else
+                    {
+                        foreach (var c in model.RequiredSkills)
+                        {
+                            skills += model.RequiredSkills.Count() != (model.RequiredSkills.IndexOf(c) + 1) ? "N'" + c + "'" + ", " : "N'" + c + "')";
+                        }
+                    }
+                }
+                else
+                {
+                    skills = "";
+                }
 
+                query = String.Format(@"SELECT Distinct V.Id, V.CompanyId, V.Name, V.OpenDate 
+                        FROM Vacancies V LEFT OUTER JOIN (Select * From Skills S, Requirements R Where S.Id = R.SkillId) X 
+                        ON V.Id = X.VacancyId Where {0} ", skills);
 
-            //if (model.OpenDate == null && model.RequiredSkills == null)
-            //{
-            //    query = "Select Id, CompanyId, Name, OpenDate as 'Open date', Amount FROM Vacancies;";
-            //}
+                if (model.MinOpenDate != dateDefault) 
+                {
+                    query = DatabaseController.AppendANDStatementToQuery(query, "V.OpenDate >= '" + model.MinOpenDate + "'");
+                }
 
-            //else
-            //{
-            //    string cities = "C.City in (";
-            //    string and = "";
-            //    string where = "";
-            //    string having = "";
-            //    string initializeColumn = "";
-            //    string checkForId = "";
+                if (model.MaxOpenDate != dateDefault)
+                {
+                    query = DatabaseController.AppendANDStatementToQuery(query, "V.OpenDate <= '" + model.MaxOpenDate + "'");
+                }
+            }
 
-            //    if (model.NumberOfVacancyMax != null || model.NumberOfVacancyMin != null)
-            //    {
-            //        having = "Having";
-            //        and = model.NumberOfVacancyMax != null && model.NumberOfVacancyMin != null ? "And" : "";
-            //        initializeColumn = @", Count(V.CompanyId) as 'Number of vacancies'";
-            //        checkForId = @", Vacancies V Where C.Id = V.CompanyId";
-            //        where = "And ";
-            //    }
-            //    else
-            //    {
-            //        where = " Where ";
-            //    }
-            //    if (model.City != null)
-            //    {
-            //        if (model.City.Count() == 1)
-            //        {
-            //            cities = "C.City = N'" + model.City[0] + "'";
-            //        }
-            //        else
-            //        {
-            //            foreach (var c in model.City)
-            //            {
-            //                cities += model.City.Count() != (model.City.IndexOf(c) + 1) ? "N'" + c + "'" + ", " : "N'" + c + "')";
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        cities = "";
-            //    }
+            context.DBDataTable = GetDataTable(query);
+            return PartialView("~/Views/Vacancies/_VacanciesListPartial.cshtml", context);
+        }
 
-            //    string vacNumberForQueryMin = model.NumberOfVacancyMin != null ? " Count(V.CompanyId) >= " + model.NumberOfVacancyMin : "";
-            //    string vacNumberForQueryMax = model.NumberOfVacancyMax != null ? " Count(V.CompanyId) <= " + model.NumberOfVacancyMax : "";
+        public static string AppendANDStatementToQuery(string query, string statement)
+        {
+            int whereStatementIndex = query.ToLower().LastIndexOf("where");
+            if (whereStatementIndex != -1)
+            {
+                string lastQueryPathComponent = query.Substring(whereStatementIndex).Trim();
+                string andStatementIfNeeded = lastQueryPathComponent.ToLower().Equals("where") ? " " : " AND ";
+                query += String.Format("{0}{1}", andStatementIfNeeded, statement);
+            }
 
-            //    query = String.Format(@"Select C.Id, C.Name, C.Website, C.City, C.Address, C.Email{0} From Companies C{1} {2} {3} Group by C.Id, C.Name, C.Website, C.City, C.Address, C.Email {4} {5} {6} {7};", initializeColumn, checkForId, where, cities, having, vacNumberForQueryMin, and, vacNumberForQueryMax);
-            //}
-
-            //context.DBDataTable = GetDataTable(query);
-            //ViewBag.FilterCompanySucceed = true;
-            return PartialView("~/Views/Companies/_CompaniesListPartial.cshtml", context);
+            return query;
         }
     }
 }

@@ -12,13 +12,20 @@
             {
                 items.Add(new SelectListItem { Text = v.Name + v.UnitMeasure, Value = v.Name });
             } }
-            @Html.DropDownListFor(m => m.Skills.Name, items)
+            @if (Model.Skills != null)
+            {
+                @Html.DropDownListFor(m => m.Skills.Name, items, new { @Value = Model.Skills.Name })
+            }
+            else
+            {
+                @Html.DropDownListFor(m => m.Skills.Name, items)
+            }
         </div>
         <div class ="col-md-2">
-            @Html.EditorFor(m => m.MinValue)
+            @Html.EditorFor(m => m.MinValue)@*, new { htmlAttributes = new { @class = "form-control", @value = Model.MinValue} })*@
         </div>
         <div class="col-md-2 col-md-offset-1">
-            @Html.EditorFor(m => m.MaxValue)
+            @Html.EditorFor(m => m.MaxValue) @*new { htmlAttributes = new { @class = "form-control", @value = Model.MaxValue }*@ 
         </div>
         <div>
             <button class="deleteRow">delete</button>

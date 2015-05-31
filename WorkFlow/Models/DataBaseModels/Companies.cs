@@ -16,42 +16,42 @@ namespace WorkFlow.Models.DataBaseModels
 
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Необходимо ввести название компании.")]
+        [Required(ErrorMessage = "Company name is required.")]
         //!!!!!!!
         //[Remote("doesUserNameExist", "Account", HttpMethod = "POST", ErrorMessage = "User name already exists. Please enter a different user name.")]
-        [Display(Name = "Название компании (Логин)*")]
+        [Display(Name = "Company name (Username)*")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Необходимо ввести адрес офиса.")]
-        [Display(Name = "Местоположение основного офиса*")]
+        [Required(ErrorMessage = "Address is required.")]
+        [Display(Name = "Address of a main office*")]
         public string Address { get; set; }
 
-        [Required(ErrorMessage = "Необходимо ввести адрес веб-сайта.")]
-        [Display(Name = "Веб-сайт*")]
+        [Required(ErrorMessage = "Web-site is required.")]
+        [Display(Name = "Web-site*")]
         public string Website { get; set; }
 
-        [Required(ErrorMessage = "Необходимо ввести название города.")]
-        [Display(Name = "Город*")]
+        [Required(ErrorMessage = "City is required.")]
+        [Display(Name = "City*")]
         public string City { get; set; }
 
-        [Display(Name = "E-mail (контакты)*")]
+        [Display(Name = "E-mail*")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Display(Name = "Контактный телефон")]
+        [Display(Name = "Phone")]
         public Nullable<long> Phone { get; set; }
 
-        [Display(Name = "Логотип компании")]
+        [Display(Name = "Company logo")]
         public string Logo { get; set; }
 
-        [Display(Name = "Форма собственности")]
+        [Display(Name = "Property form")]
         [StringLength(50)]
         public string PropertyForm { get; set; }
 
         //[Column(TypeName = "date")]
 
-        [DataType(DataType.Date, ErrorMessage="Введите дату в виде месяц/день/год")]
-        [Display(Name = "День рождения компании")]
+        [DataType(DataType.Date, ErrorMessage="Enter date as mm/dd/yyyy.")]
+        [Display(Name = "Company opening date")]
         public DateTime CreatingDate { get; set; }
 
         public virtual ICollection<Vacancies> Vacancies { get; set; }

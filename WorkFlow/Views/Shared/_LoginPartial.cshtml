@@ -12,9 +12,9 @@
             <ul class="nav navbar-nav" style="margin-right:25px">
 
                 <li class="dropdown">   
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Вы вошли с эл. адреса @User.Identity.GetUserName(). <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">You're logged on from @User.Identity.GetUserName(). <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("Редактировать профиль", "Index", "Manage")</li>
+                        <li>@Html.ActionLink("Edit profile", "Index", "Manage")</li>
                             @{int id = WorkFlow.Controllers.DatabaseController.DoSQL<WorkFlow.Models.DataBaseModels.Companies>(String.Format("Select * From Companies Where Email = '{0}'", User.Identity.GetUserName())).LastOrDefault().Id;}
 
                        <li>@Html.ActionLink("My page", "Index", "CompanyInfo", new { id = @id }, new { })</li>
@@ -29,18 +29,18 @@
     }
     else
     {
-        <li>@Html.ActionLink("Зарегистрироватся", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Sign up", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
         
 
 
     <li class="dropdown">
-        <a class="dropdown-toggle" href="#" data-toggle="dropdown"> Войти <strong class="caret"></strong></a>
+        <a class="dropdown-toggle" href="#" data-toggle="dropdown"> Sign in <strong class="caret"></strong></a>
         <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
             <form method="post" action="@Url.Action("Login", "Account")" accept-charset="UTF-8" style="margin-bottom:5px" >
                 @Html.AntiForgeryToken()
                 <div style ="margin-bottom: 15px; border-color: #345054; border-width:thin">
-                    @Html.EditorFor(m => m.Email, "Название компании")
-                    @Html.EditorFor(m => m.Password, "Пароль")
+                    @Html.EditorFor(m => m.Email, "Company name")
+                    @Html.EditorFor(m => m.Password, "Password")
                 </div>
                 @*<input  type="text" placeholder=" E-mail" id="email" name="email">
                 <input style="margin-bottom: 15px; border-color: #345054; border-width:thin" type="password" placeholder=" Пароль" id="password" name="password">*@

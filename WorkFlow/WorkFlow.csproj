@@ -356,6 +356,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="App_Data\CompanyReport.rtf" />
     <Content Include="App_Data\template.rtf" />
+    <Content Include="App_Data\VacancyReport.rtf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="Scripts\amplify.js" />
@@ -474,6 +475,7 @@
     <Content Include="Views\Vacancies\_RequirementsListPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Requirements.cshtml" />
     <Content Include="Views\Vacancies\EditVacancyInfo.cshtml" />
+    <Content Include="Views\Companies\_SkilllsStatisticResultPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
