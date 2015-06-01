@@ -207,6 +207,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\QueryEditorController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\StatisticController.cs" />
     <Compile Include="Controllers\VacanciesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -355,8 +356,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="App_Data\CompanyReport.rtf" />
-    <Content Include="App_Data\template.rtf" />
     <Content Include="App_Data\VacancyReport.rtf" />
+    <Content Include="App_Data\template.rtf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="Scripts\amplify.js" />
@@ -464,18 +465,18 @@
     <Content Include="Views\Vacancies\Create.cshtml" />
     <Content Include="Views\QueryEditor\Index.cshtml" />
     <Content Include="Views\QueryEditor\_QueryListPartial.cshtml" />
-    <Content Include="Views\Companies\_StatisticsPartial.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Search\_SearchCompanyPartial.cshtml" />
     <Content Include="Views\Search\_SearchVacancyPartial.cshtml" />
     <Content Include="Views\Search\_SearchResultPartial.cshtml" />
-    <Content Include="Views\Companies\_CompanyStatisticResultPartial.cshtml" />
+    <Content Include="Views\Statistic\_CompanyStatisticResultPartial.cshtml" />
     <Content Include="Views\CompanyInfo\VacancyInfo.cshtml" />
     <Content Include="Views\Vacancies\_VacanciesFilterFormPartial.cshtml" />
     <Content Include="Views\Vacancies\_RequirementsListPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Requirements.cshtml" />
     <Content Include="Views\Vacancies\EditVacancyInfo.cshtml" />
-    <Content Include="Views\Companies\_SkilllsStatisticResultPartial.cshtml" />
+    <Content Include="Views\Statistic\_SkillStatisticPartial.cshtml" />
+    <Content Include="Views\Statistic\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

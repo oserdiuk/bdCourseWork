@@ -1,0 +1,41 @@
+﻿@model WorkFlow.Models.DataBaseModels.DBContext
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            @{
+                for (int i = 1; i < Model.DBDataTable.Columns.Count; i++)
+                {
+                    <th>@Model.DBDataTable.Columns[i].Caption </th>
+                }
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (System.Data.DataRow row in Model.DBDataTable.Rows)
+            {
+                <tr>
+                    @{
+                for (int i = 1; i < row.ItemArray.Count(); i++)
+                {
+                    <td>
+
+                        @{if (row.ItemArray[i].ToString().Contains("12:00:00 AM"))
+                        {
+                            var temp = ((DateTime)row.ItemArray[i]).ToShortDateString();
+                            @temp
+                        }
+                        else if (row.ItemArray[i].ToString() != "0")
+                        {
+                            @row.ItemArray[i].ToString()
+                        }
+                        }
+                    </td>
+                }
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>

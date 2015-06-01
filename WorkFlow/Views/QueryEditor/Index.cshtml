@@ -12,10 +12,13 @@
 @using (Ajax.BeginForm("RunQuery", "Database", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace }))
 {
     @Html.AntiForgeryToken()
-    <div class="form-group ">
+    <br />
+    <div class="col-md-offset-4">
         @Html.EditorFor(m => m.Query, new { htmlAttributes = new { @class = "form-control", placeholder = "Input your query here..." } })
         <input class="btn btn-primary btn-block" type="submit" id="sign-in" value="Run">
     </div>
+    <br />
+    <br />
 
     <div id="divResponse">
         @Html.Partial("_QueryListPartial", new WorkFlow.Models.QueryEditorInfo())

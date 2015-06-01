@@ -39,10 +39,6 @@
                 @Html.Partial("_VacanciesFilterFormPartial", new WorkFlow.Models.VacancyFilter())
 
 
-                <li> @Ajax.ActionLink("Statistics", "Statistics", "Companies", new { context = Model, actionNumber = ActionWithTable.Sort, tableName = "Companies", fieldToSort = "Name" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
-
-
-
               
             </ul>
 

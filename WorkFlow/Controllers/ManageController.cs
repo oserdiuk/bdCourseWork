@@ -419,7 +419,7 @@ namespace WorkFlow.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    vacancy.FileName = "";
+                    //vacancy.FileName = "";
                     AddVacancy(vacancy);
                 }
                 var errors = ModelState.Values.SelectMany(v => v.Errors);
@@ -454,9 +454,10 @@ namespace WorkFlow.Controllers
 
         public void AddVacancy(Vacancies vacancy)
         {
-            DatabaseController.DoSQL<Vacancies>(String.Format("INSERT INTO Vacancies (Name, OpenDate, Amount, Description, FileName, CompanyId) values (N'{0}', N'{1}', N'{2}', N'{3}', N'{4}', N'{5}')", vacancy.Name, vacancy.OpenDate, vacancy.Amount, vacancy.Description, vacancy.FileName, GetAuthenticatedCompany().Id));
+            DatabaseController.DoSQL<Vacancies>(String.Format("INSERT INTO Vacancies (Name, OpenDate, Amount, Description, CompanyId) values (N'{0}', N'{1}', N'{2}', N'{3}', N'{4}')", vacancy.Name, vacancy.OpenDate, vacancy.Amount, vacancy.Description, GetAuthenticatedCompany().Id));
             int id = DatabaseController.DoSQL<Vacancies>(@"select Id from Vacancies where Id = (select max(Id) from Vacancies)").LastOrDefault().Id;
 
+            if (vacancy.Requirements == null) return;
             foreach (var r in vacancy.Requirements)
             {
                 DatabaseController.DoSQL<Requirements>(String.Format(@"Insert Into Requirements (VacancyId, SkillId, MinValue, MaxValue) Values ({0}, {1}, '{2}', '{3}')", id, r.SkillId, r.MaxValue, r.MinValue));
@@ -485,39 +486,33 @@ namespace WorkFlow.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    vacancy.FileName = "";
-                    DatabaseController.DoSQL<Vacancies>(String.Format("Update Vacancies Set Name = N'{0}', OpenDate = N'{1}', Amount = {2}, Description = '{3}', FileName = '{4}', CompanyId = {5} Where Id = {6}", vacancy.Name, vacancy.OpenDate, vacancy.Amount, vacancy.Description, vacancy.FileName, GetAuthenticatedCompany().Id, vacancy.Id));
-                    List<Requirements> requirements = DatabaseController.DoSQL<Requirements>("Select * From Requirements Where VacancyId = " + vacancy.Id);
+                    //vacancy.FileName = "";
+                    DatabaseController.DoSQL<Vacancies>(String.Format("Update Vacancies Set Name = N'{0}', OpenDate = N'{1}', Amount = {2}, Description = '{3}', CompanyId = {4} Where Id = {5}", vacancy.Name, vacancy.OpenDate, vacancy.Amount, vacancy.Description, GetAuthenticatedCompany().Id, vacancy.Id));
+                    List<Requirements> oldRequirements = DatabaseController.DoSQL<Requirements>("Select * From Requirements Where VacancyId = " + vacancy.Id);
                     if (vacancy.Requirements != null)
                     {
-                        foreach (var r in vacancy.Requirements)
+                        foreach (var oldRequirement in oldRequirements)
                         {
-                            bool needToDelete = true; //= requirements.Any(newReq => newReq.SkillId == oldRequirement.SkillId);
-                            //foreach (var oldReq in requirements)
-                            //{
-                            //    if (r.SkillId == oldReq.SkillId)
-                            //    {
-                            //        needToDelete = false;
-                            //        break;
-                            //    }
-                            //}
-
+                            bool needToDelete = !vacancy.Requirements.Any(newReq => newReq.SkillId == oldRequirement.SkillId);
                             if (needToDelete)
                             {
-                                DatabaseController.DoSQL<Requirements>(String.Format(@"Delete from Requirements Where SkillId = {0}", r.SkillId));
-                                continue;
+                                DatabaseController.DoSQL<Requirements>(String.Format(@"Delete from Requirements Where SkillId = {0}", oldRequirement.SkillId));
                             }
+                        }
 
-                            var oldRequirement = requirements.FirstOrDefault(m => m.SkillId == r.SkillId);
+                        foreach (var newRequirement in vacancy.Requirements)
+                        {
+                            var oldRequirement = oldRequirements.FirstOrDefault(m => m.SkillId == newRequirement.SkillId);
                             if (oldRequirement != null)
                             {
-                                DatabaseController.DoSQL<Requirements>(String.Format(@"Update Requirements Set VacancyId = {0}, SkillId = {1}, MinValue = N'{2}', MaxValue = N'{3}' Where SkillId = {1} And VacancyId = {0}", vacancy.Id, r.SkillId, r.MinValue, r.MaxValue));
+                                DatabaseController.DoSQL<Requirements>(String.Format(@"Update Requirements Set VacancyId = {0}, SkillId = {1}, MinValue = N'{2}', MaxValue = N'{3}' Where SkillId = {1} And VacancyId = {0}", vacancy.Id, newRequirement.SkillId, newRequirement.MinValue, newRequirement.MaxValue));
                             }
                             else
                             {
-                                DatabaseController.DoSQL<Requirements>(String.Format(@"Insert Into Requirements (VacancyId, SkillId, MinValue, MaxValue) Values ({0}, {1}, '{2}', '{3}')", vacancy.Id, r.SkillId, r.MinValue, r.MaxValue));
+                                DatabaseController.DoSQL<Requirements>(String.Format(@"Insert Into Requirements (VacancyId, SkillId, MinValue, MaxValue) Values ({0}, {1}, '{2}', '{3}')", vacancy.Id, newRequirement.SkillId, newRequirement.MinValue, newRequirement.MaxValue));
                             }
                         }
+
                     }
                     else
                     {
@@ -548,7 +543,8 @@ namespace WorkFlow.Controllers
                     ParseFileToVacancy(path);
                 }
                 ViewBag.Message = "Upload successful";
-                return RedirectToAction("Create", "Vacancies");
+                int id = DatabaseController.DoSQL<WorkFlow.Models.DataBaseModels.Companies>(String.Format("Select * From Companies Where Email = '{0}'", User.Identity.GetUserName())).LastOrDefault().Id;
+                return RedirectToAction("Index", "CompanyInfo", new { id = id });
             }
             catch (Exception ex)
             {
@@ -618,29 +614,20 @@ namespace WorkFlow.Controllers
                             return;
                         }
                     }
-                    else if (infoFromFile[i].Contains("Skills:"))
-                    {
-                        try
-                        {
-                            GetSkillsFromFile(vacanciesText);
-                        }
-                        catch (Exception ex)
-                        {
-                            return;
-                        }
-                    }
                 }
+                AddVacancy(vacancy);
 
-                vacancy.FileName = Guid.NewGuid().ToString();
+                //vacancy.FileName = Guid.NewGuid().ToString();
 
-                //int id = (DatabaseController.DoSQL<Vacancies>(String.Format(@"Select V.Id From Vacancies V Where V.Name = N'{0}' Order By V.Id;", vacancy.Name))).LastOrDefault().Id;
-                using (RichEditControl rtc = new RichEditControl())
-                {
-                    rtc.RtfText = expr;
-                    rtc.SaveDocument(Server.MapPath(pathToVacancies + "//" + vacancy.FileName + ".rtf"), DocumentFormat.Rtf);
-                }
+                ////int id = (DatabaseController.DoSQL<Vacancies>(String.Format(@"Select V.Id From Vacancies V Where V.Name = N'{0}' Order By V.Id;", vacancy.Name))).LastOrDefault().Id;
+                //using (RichEditControl rtc = new RichEditControl())
+                //{
+                //    rtc.RtfText = expr;
+                //    rtc.SaveDocument(Server.MapPath(pathToVacancies + "//" + vacancy.FileName + ".rtf"), DocumentFormat.Rtf);
+                //}
 
             }
+
         }
 
         private void GetSkillsFromFile(List<string> vacanciesText)
@@ -669,14 +656,14 @@ namespace WorkFlow.Controllers
                     {
                         var nameAndPoints = skills[i].Split(',').ToList();
                         var skill = DatabaseController.DoSQL<Skills>("Select * From Skills Where Name = " + nameAndPoints[0]);
-                        
+
                         if (skill.Count() == 0)
                         {
                             continue;
                         }
 
                         DatabaseController.DoSQL<Skills>("Select * From Skills Where Name = " + nameAndPoints[0]);
-                            skills[i].Split(',').ToList();
+                        skills[i].Split(',').ToList();
                     }
 
 

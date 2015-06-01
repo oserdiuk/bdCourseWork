@@ -100,6 +100,9 @@ namespace WorkFlow.Models
                 skill.Vacancies = dataTable.Select("Id = " + skill.Id).Select(x => x.ItemArray[3]).Cast<string>().ToList();
                 this.SkillsInfo.Add(skill);
             }
+
+            this.SkillsInfo = this.SkillsInfo.GroupBy(s => s.Id)
+                .Select(grp => grp.First()).ToList();
         }
     }
 

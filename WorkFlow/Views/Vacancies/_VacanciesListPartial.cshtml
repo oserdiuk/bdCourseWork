@@ -39,11 +39,11 @@ else
 
     foreach (System.Data.DataRow row in Model.DBDataTable.Rows)
     {
-        <tr onclick="location.href = '@(Url.Action("VacancyInfo", "CompanyInfo", new { id = Convert.ToInt32(row.ItemArray[0]) }))'" style="cursor: pointer">
+        <tr  style="cursor: pointer">
             @{
         for (int i = 2; i < row.ItemArray.Count(); i++)
         {
-            <td>
+            <td onclick="location.href = '@(Url.Action("VacancyInfo", "CompanyInfo", new { id = Convert.ToInt32(row.ItemArray[0]) }))'">
 
                 @{if (row.ItemArray[i].ToString() != "0")
                 { @row.ItemArray[i].ToString()}

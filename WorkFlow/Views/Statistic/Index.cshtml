@@ -1,0 +1,23 @@
+﻿@model WorkFlow.Models.DataBaseModels.DBContext
+
+<script src="~/Scripts/MicrosoftMvcAjax.js" type="text/javascript"></script>
+
+
+@section scripts{
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+}
+
+ <br />
+
+<ul class="nav nav-tabs">
+    <li> @Ajax.ActionLink("Company in cities", "Statistics", "Statistic", new { statistic = WorkFlow.Controllers.Statistics.CompanyInCities }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
+    <li> @Ajax.ActionLink("Vacancies with skills", "Statistics", "Statistic", new { statistic = WorkFlow.Controllers.Statistics.SkillsForVacancy }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
+    <li> @Ajax.ActionLink("Vacancies of last month", "Statistics", "Statistic", new { statistic = WorkFlow.Controllers.Statistics.VacanciesInRegion }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>
+</ul>
+
+<br />
+<div id="divResponse">
+    @Html.Partial("~/Views/Statistic/_CompanyStatisticResultPartial.cshtml", Model)
+
+</div>
+

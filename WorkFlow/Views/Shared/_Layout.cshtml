@@ -27,7 +27,8 @@
                 <li class="active">@Html.ActionLink("Companies", "Index", "Companies")</li>
                 <li class="active">@Html.ActionLink("Vacancy", "Index", "Vacancies")</li>
                 <li class="active">@Html.ActionLink("Query editor", "Index", "QueryEditor")</li>
-
+                <li class="active">@Html.ActionLink("Statistics", "Index", "Statistic")</li>
+                @*<li> @Ajax.ActionLink("Statistics", "Statistics", "Companies", new { context = Model, actionNumber = ActionWithTable.Sort, tableName = "Companies", fieldToSort = "Name" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divResponse", InsertionMode = InsertionMode.Replace })</li>*@
             </ul>
             @Html.Partial("_LoginPartial", new WorkFlow.Models.LoginViewModel())
 
